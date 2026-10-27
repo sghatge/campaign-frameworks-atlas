@@ -25,8 +25,12 @@ Ten production patterns for **Adobe Campaign Classic v8**, each shown as a compl
 
 Link to a single framework with `#uc-1` … `#uc-10`.
 
+## Campaign Ops Toolkit
+
+[`/toolkit/`](https://sghatge.github.io/campaign-frameworks-atlas/toolkit/) has ten working tools, one per framework. Change the inputs and the results and generated configuration update as you type: cart recovery planner, pre-flight legal checker, health monitor thresholds, recommendation API capacity, pressure rule simulator, preference matrix builder, lead score calculator, voucher pool sizing, privacy request tracker and ETL volume estimator. Link to a tool with `#t-1` … `#t-10`.
+
 > All test records, test-group results and KPI values are **simulated test data** for demonstration. They are not results from a live client. Code samples are reference patterns to adapt to each instance's schemas.
 
-Single static page (`index.html`), no build step. Fonts load from Google Fonts.
+Static pages (`index.html`, `toolkit/index.html`), no build step. Fonts load from Google Fonts.
 
 Prepared by Sangram G. · CRM & Marketing Ops architecture

@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ten working Adobe Campaign v8 tools with live results and generated configuration.">
+<meta name="author" content="Sangram G.">
+<meta property="og:title" content="Campaign Ops Toolkit">
+<meta property="og:description" content="Ten working Adobe Campaign v8 tools with live results and generated configuration.">
+<meta property="og:type" content="website">
+<title>Campaign Ops Toolkit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Layout: workbench. Tool list on the left, inputs and live results side by side, generated config underneath */
+:root{
+  --paper:#F2F5F7; --panel:#FFFFFF; --ink:#13212C; --muted:#5A6977; --line:#D3DCE3; --soft:#E7EDF1; --field:#F7F9FA;
+  --accent:#0E6B78; --accent-ink:#FFFFFF; --ok:#3F6F12; --warn:#9A520F; --stop:#B42335;
+  --ok-bg:#E6F0DA; --warn-bg:#F7E9D9; --stop-bg:#F8E1E4;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif; --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0D151B; --panel:#131E26; --ink:#E4ECF1; --muted:#93A3B0; --line:#26343F; --soft:#1A2731; --field:#0F1920;
+  --accent:#4DC0CB; --accent-ink:#06191C; --ok:#A5C85A; --warn:#EBA460; --stop:#F07884;
+  --ok-bg:#1E2A12; --warn-bg:#2C2117; --stop-bg:#2E161B; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#0D151B; --panel:#131E26; --ink:#E4ECF1; --muted:#93A3B0; --line:#26343F; --soft:#1A2731; --field:#0F1920;
+  --accent:#4DC0CB; --accent-ink:#06191C; --ok:#A5C85A; --warn:#EBA460; --stop:#F07884;
+  --ok-bg:#1E2A12; --warn-bg:#2C2117; --stop-bg:#2E161B; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+.eyebrow{font:500 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+
+header{padding-block:28px 22px;border-bottom:1px solid var(--line)}
+.hd{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+header h1{font-size:clamp(30px,4.4vw,46px);font-weight:700;letter-spacing:-.02em}
+header h1 span{color:var(--accent)}
+header p{margin:8px 0 0;color:var(--muted);max-width:62ch}
+.hd-links{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:500 13px var(--body);background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent)}
+
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;padding-block:24px 60px;align-items:start}
+nav.tools{position:sticky;top:16px;display:grid;gap:4px}
+nav.tools button{all:unset;cursor:pointer;display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px 10px;border-radius:6px;font:500 13.5px/1.35 var(--body)}
+nav.tools button .n{font:500 12px/1.5 var(--mono);color:var(--muted)}
+nav.tools button small{display:block;font:400 12px/1.35 var(--body);color:var(--muted)}
+nav.tools button:hover{background:var(--soft)}
+nav.tools button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+nav.tools button[aria-selected="true"] .n,nav.tools button[aria-selected="true"] small{color:var(--accent-ink);opacity:.85}
+nav.tools button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.tool-head{display:flex;justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+.tool-head h2{font-size:clamp(22px,2.8vw,30px);font-weight:700}
+.tool-head .q{margin:6px 0 0;color:var(--muted);max-width:68ch}
+.tool-head .acts{display:flex;gap:6px;flex-wrap:wrap}
+
+.bench{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px;margin-top:20px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.panel > .eyebrow{margin-bottom:12px}
+.grp{margin:14px 0 8px;font:600 12.5px var(--body);color:var(--muted);padding-top:12px;border-top:1px solid var(--line)}
+.grp:first-of-type{margin-top:0;padding-top:0;border-top:0}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.f{display:grid;gap:4px;min-width:0}
+.f.wide{grid-column:1/-1}
+.f label{font-size:12.5px;color:var(--muted)}
+.f .in{display:flex;align-items:center;border:1px solid var(--line);border-radius:6px;background:var(--field);overflow:hidden}
+.f .in:focus-within{border-color:var(--accent)}
+.f input,.f select,.f textarea{font:500 14px var(--mono);color:var(--ink);background:transparent;border:0;padding:8px 10px;width:100%;min-width:0;outline:none}
+.f textarea{font-size:12.5px;line-height:1.55;resize:vertical;min-height:120px}
+.f .suf{font:500 12px var(--mono);color:var(--muted);padding-right:10px;white-space:nowrap}
+.checks{display:grid;gap:6px}
+.checks label{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--ink);cursor:pointer}
+.checks input{width:16px;height:16px;accent-color:var(--accent)}
+
+.verdict{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:8px;font-weight:500;margin-bottom:14px}
+.verdict b{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:5px 7px;border-radius:4px;flex:none}
+.verdict.ok{background:var(--ok-bg)} .verdict.ok b{background:var(--ok);color:var(--panel)}
+.verdict.warn{background:var(--warn-bg)} .verdict.warn b{background:var(--warn);color:var(--panel)}
+.verdict.stop{background:var(--stop-bg)} .verdict.stop b{background:var(--stop);color:var(--panel)}
+.stats{display:flex;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stat{flex:1 1 150px;background:var(--panel);padding:12px 14px;min-width:0;box-shadow:inset -1px -1px 0 var(--line)}
+.stat .v{font:700 24px/1.15 var(--display);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.stat .nt{font:400 11.5px var(--mono);color:var(--muted)}
+.bars{display:grid;gap:8px;margin-top:16px}
+.bar{display:grid;grid-template-columns:120px 1fr 90px;gap:10px;align-items:center;font-size:13px}
+.bar .tr{height:12px;background:var(--soft);border-radius:3px;overflow:hidden}
+.bar .fl{height:100%;background:var(--accent);border-radius:3px}
+.bar .bv{font:500 12.5px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:8px}
+.tbl table{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font:500 10.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--soft)}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.num{font-family:var(--mono);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font:600 10.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:4px 6px;border-radius:3px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.stop{background:var(--stop-bg);color:var(--stop)}
+.notes{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.notes li{padding-left:14px;position:relative}
+.notes li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.code{margin-top:22px;background:#0F1A21;color:#D6E2EA;border-radius:10px;overflow:hidden}
+.code-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;background:#18262F;font:500 12px var(--mono);color:#9FB3C1}
+.code-h button{font:500 12px var(--mono);background:transparent;color:#D6E2EA;border:1px solid #33434E;border-radius:4px;padding:4px 8px;cursor:pointer}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font:12.5px/1.6 var(--mono);white-space:pre;max-height:380px}
+footer{border-top:1px solid var(--line);padding-block:18px 36px;color:var(--muted);font-size:12.5px}
+
+@media (max-width:980px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  nav.tools{position:static;display:flex;overflow-x:auto;gap:6px;padding-bottom:6px}
+  nav.tools button{flex:none;grid-template-columns:auto;padding:8px 12px;border:1px solid var(--line);background:var(--panel)}
+  nav.tools button small,nav.tools button .n{display:none}
+  .bench{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){.fields{grid-template-columns:1fr}.bar{grid-template-columns:90px 1fr 70px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap hd">
+    <div>
+      <div class="eyebrow">Adobe Campaign Classic v8 · Companion to the Frameworks Atlas</div>
+      <h1>Campaign Ops <span>Toolkit</span></h1>
+      <p>Ten working tools, one per framework. Change the inputs and the results and configuration update as you type. Every tool opens with example values.</p>
+    </div>
+    <div class="hd-links"><a class="btn" id="atlasLink" href="https://sghatge.github.io/campaign-frameworks-atlas/" target="_blank" rel="noopener">Open the Atlas ↗</a></div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="tools" id="nav" role="tablist" aria-label="Tools"></nav>
+  <main id="main" aria-live="polite"></main>
+</div>
+
+<footer><div class="wrap">Example values are illustrative. Results are estimates from the inputs you enter and are no substitute for testing on your own instance. Generated configuration is a starting point to adapt to your schemas. Built by Sangram G.</div></footer>
+
+<script>
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function fmt(n,d){if(!isFinite(n))return "—";return Number(n).toLocaleString("en-US",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})}
+function eur(n,d){return "€"+fmt(n,d==null?0:d)}
+function pct(n,d){return fmt(n,d==null?1:d)+"%"}
+function ymd(d){return d.toISOString().slice(0,10)}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+function addMonths(d,n){var x=new Date(d);var day=x.getDate();x.setMonth(x.getMonth()+n);if(x.getDate()<day)x.setDate(0);return x}
+var TODAY=new Date(new Date().toDateString());
+
+/* ---------- tool definitions ---------- */
+var TOOLS=[
+{id:1,name:"Cart recovery planner",sub:"Channel waterfall and cost",q:"How many abandoned carts will the push → email → SMS journey win back, and what does each recovery cost?",
+ inputs:[
+  ["g","Volume"],["carts","Abandoned carts per month","num",10000,{step:500}],["aov","Average order value","num",120,{suf:"€"}],["holdout","Recovery with no journey","num",4.1,{suf:"%",step:.1}],
+  ["g","Push"],["pushReach","Carts with an app token","num",62,{suf:"%"}],["pushConv","Push conversion","num",8,{suf:"%",step:.1}],["wPush","Wait before push","num",15,{suf:"min"}],["cPush","Cost per push","num",0.001,{suf:"€",step:.001}],
+  ["g","Email"],["emailReach","Remaining with a valid email","num",90,{suf:"%"}],["emailConv","Email conversion","num",6.5,{suf:"%",step:.1}],["wEmail","Wait before email","num",180,{suf:"min"}],["cEmail","Cost per email","num",0.002,{suf:"€",step:.001}],
+  ["g","SMS"],["smsShare","Tier-1 with SMS opt-in","num",12,{suf:"%"}],["smsConv","SMS conversion","num",10,{suf:"%",step:.1}],["wSms","Wait before SMS","num",1440,{suf:"min"}],["cSms","Cost per SMS","num",0.05,{suf:"€",step:.01}]],
+ calc:function(v){
+  var pushSent=v.carts*v.pushReach/100, pushRec=pushSent*v.pushConv/100, rem=v.carts-pushRec;
+  var emailSent=rem*v.emailReach/100, emailRec=emailSent*v.emailConv/100, rem2=rem-emailRec;
+  var smsSent=rem2*v.smsShare/100, smsRec=smsSent*v.smsConv/100;
+  var rec=pushRec+emailRec+smsRec, rate=rec/v.carts*100, cost=pushSent*v.cPush+emailSent*v.cEmail+smsSent*v.cSms;
+  var incr=Math.max(0,rate-v.holdout), incrRev=incr/100*v.carts*v.aov;
+  var st=incr>=5?"ok":incr>0?"warn":"stop";
+  return {verdict:[st,st==="ok"?"Journey lifts recovery "+fmt(incr,1)+" points above doing nothing.":st==="warn"?"Small lift of "+fmt(incr,1)+" points. Check conversion assumptions before building.":"No lift over the holdout. Revisit channel reach and offers."],
+   stats:[["Recovered orders",fmt(rec),pct(rate)+" of carts"],["Incremental revenue",eur(incrRev),"above the "+pct(v.holdout)+" holdout"],["Messaging cost",eur(cost,2),"per month"],["Cost per recovery",eur(cost/rec,3),"all channels"]],
+   bars:[["Push",pushRec,fmt(pushRec)],["Email",emailRec,fmt(emailRec)],["SMS",smsRec,fmt(smsRec)]],
+   table:{cols:["Channel","Sent","Recovered","Cost"],rows:[["Push",fmt(pushSent),fmt(pushRec),eur(pushSent*v.cPush,2)],["Email",fmt(emailSent),fmt(emailRec),eur(emailSent*v.cEmail,2)],["SMS",fmt(smsSent),fmt(smsRec),eur(smsSent*v.cSms,2)]]},
+   notes:["Each step only targets carts not yet recovered, so the channels never double-count.","An order_completed event should stop the journey before every send."],
+   code:{lang:"JSON · journey routing config",text:JSON.stringify({journey:"CART_ABANDONED",stopOn:"ORDER_COMPLETED",steps:[
+     {channel:"push",waitMinutes:v.wPush,condition:"ctx/profile/@pushToken = 1"},
+     {channel:"email",waitMinutes:v.wEmail,condition:"no order AND @email is valid"},
+     {channel:"sms",waitMinutes:v.wSms,condition:"no order AND loyaltyTier = 1 AND smsOptIn = 1"}],
+     typology:"Transactional · cart recovery"},null,2)}};
+ }},
+
+{id:2,name:"Pre-flight legal checker",sub:"Validate a market's HTML",q:"Does this market's email have the legal elements it needs before it goes to approval?",
+ inputs:[["market","Market","sel","AT",{opts:["DE","AT","GR","CY","HR","SI","RS","HU","CZ","Other"]}],
+  ["html","Email HTML","area",'<table role="presentation" width="600">\n  <tr><td><img src="https://cdn.example.com/hero.jpg" alt="New foldable"></td></tr>\n  <tr><td><h1>Unfold more</h1><p>Pre-order today.</p></td></tr>\n  <tr><td><img src="https://cdn.example.com/badge.png"></td></tr>\n  <tr><td class="footer">\n    <a data-legal="unsubscribe" href="<%@ include view=\'UnsubscriptionLink\' %>">Unsubscribe</a>\n    <a href="http://example.com/terms">Terms</a>\n  </td></tr>\n</table>',{wide:1,rows:12}]],
+ calc:function(v){
+  var REQ={DE:["imprint","unsubscribe"],AT:["imprint","unsubscribe"],GR:["unsubscribe","privacy"],CY:["unsubscribe","privacy"],HR:["unsubscribe","privacy"],SI:["unsubscribe","privacy"],RS:["unsubscribe"],HU:["unsubscribe","privacy"],CZ:["unsubscribe","privacy"],Other:["unsubscribe"]};
+  var req=REQ[v.market]||REQ.Other, html=v.html||"", rows=[], block=0, warn=0;
+  req.forEach(function(t){var ok=html.indexOf('data-legal="'+t+'"')>-1;if(!ok)block++;rows.push([ "Legal tag: "+t,ok?["ok","Found"]:["stop","Missing"],ok?"":"Add an element with data-legal=\""+t+"\""])});
+  var imgs=html.match(/<img\b[^>]*>/gi)||[], noAlt=imgs.filter(function(i){return !/\salt\s*=/.test(i)}).length;
+  rows.push(["Images with alt text",noAlt?["warn",noAlt+" missing"]:["ok","All "+imgs.length]," "+(noAlt?"Screen readers and image-off views need alt text":"")]); if(noAlt)warn++;
+  var insecure=(html.match(/href\s*=\s*["']http:\/\//gi)||[]).length;
+  rows.push(["Links use HTTPS",insecure?["warn",insecure+" http link"+(insecure>1?"s":"")]:["ok","Yes"],insecure?"Tracked links over http can be flagged by filters":""]); if(insecure)warn++;
+  var st=block?"stop":warn?"warn":"ok";
+  var js="// Pre-flight check for "+v.market+": runs before approval\nvar REQUIRED = "+JSON.stringify(req)+";\nvar d = NLWS.nmsDelivery.load(vars.deliveryId);\nvar html = String(d.content.html.source);\nvar missing = REQUIRED.filter(function (t) {\n  return html.indexOf('data-legal=\"' + t + '\"') === -1;\n});\nif (missing.length) {\n  logWarning('"+v.market+" blocked, missing: ' + missing.join(', '));\n  task.postEvent(task.transitionByName('fail'));\n} else {\n  task.postEvent(task.transitionByName('pass'));\n}";
+  return {verdict:[st,st==="stop"?"Blocked: "+block+" required legal element"+(block>1?"s are":" is")+" missing for "+v.market+".":st==="warn"?"Passes legal checks for "+v.market+", with "+warn+" quality warning"+(warn>1?"s":"")+".":"Ready for approval in "+v.market+"."],
+   stats:[["Required for "+v.market,req.length+" tags",req.join(", ")],["Blocking issues",String(block),""],["Warnings",String(warn),""]],
+   table:{cols:["Check","Result","Fix"],rows:rows.map(function(r){return [r[0],'<span class="pill '+r[1][0]+'">'+esc(r[1][1])+'</span>',r[2]]}),raw:[1]},
+   code:{lang:"JavaScript · pre-flight activity for "+v.market,text:js}};
+ }},
+
+{id:3,name:"Health monitor thresholds",sub:"Alert levels and payload",q:"With these thresholds and today's readings, which alerts fire, how severe are they, and how fast are they caught?",
+ inputs:[["g","Thresholds"],["freq","Check every","num",5,{suf:"min"}],["stuck","Stuck workflow after","num",180,{suf:"min"}],["backlog","MTA backlog alert","num",50000,{suf:"msgs",step:1000}],["space","Table space warning","num",80,{suf:"%"}],
+  ["g","Current readings"],["failed","Failed workflows","num",1],["runtime","Longest running workflow","num",200,{suf:"min"}],["pending","MTA messages pending","num",62400,{step:100}],["used","Table space used","num",76,{suf:"%"}],
+  ["chan","Alert channel","sel","Slack",{opts:["Slack","Microsoft Teams"]}]],
+ calc:function(v){
+  var rows=[],sev=0;
+  function add(name,val,thr,level,fire){rows.push([name,val,thr,fire?level:"ok"]);if(fire)sev=Math.max(sev,level==="stop"?2:1)}
+  add("Failed workflows",fmt(v.failed),"> 0",v.failed>2?"stop":"warn",v.failed>0);
+  add("Longest running workflow",fmt(v.runtime)+" min","> "+fmt(v.stuck)+" min","warn",v.runtime>v.stuck);
+  add("MTA backlog",fmt(v.pending),"> "+fmt(v.backlog),"stop",v.pending>v.backlog);
+  add("Table space",fmt(v.used)+"%","> "+fmt(v.space)+"%",v.used>=90?"stop":"warn",v.used>v.space);
+  var fired=rows.filter(function(r){return r[3]!=="ok"});
+  var st=sev===2?"stop":sev===1?"warn":"ok";
+  var lab={ok:"OK",warn:"P2",stop:"P1"};
+  var payload=v.chan==="Slack"?{text:(st==="ok"?"All checks healthy":fired.length+" alert(s) on Campaign v8"),blocks:fired.map(function(r){return {type:"section",text:{type:"mrkdwn",text:"*"+lab[r[3]]+"* · "+r[0]+": "+r[1]+" (threshold "+r[2]+")"}}})}
+     :{"@type":"MessageCard",summary:"Campaign v8 health",title:st==="ok"?"All checks healthy":fired.length+" alert(s) on Campaign v8",sections:fired.map(function(r){return {activityTitle:lab[r[3]]+" · "+r[0],text:r[1]+" (threshold "+r[2]+")"}})};
+  return {verdict:[st,st==="stop"?"P1: page on-call now.":st==="warn"?"P2: card to the ops channel, fix within the shift.":"All checks within thresholds."],
+   stats:[["Alerts firing",String(fired.length),"of 4 checks"],["Worst-case detection",fmt(v.freq)+" min","one check interval"],["Checks per day",fmt(1440/v.freq),"monitor runs"]],
+   table:{cols:["Check","Reading","Threshold","Level"],rows:rows.map(function(r){return [r[0],r[1],r[2],'<span class="pill '+r[3]+'">'+lab[r[3]]+'</span>']}),raw:[3]},
+   notes:["Restart only workflows on an approved list. Never auto-restart a send workflow.","Add a heartbeat so a stopped monitor raises its own alert."],
+   code:{lang:"JSON · "+v.chan+" webhook payload",text:JSON.stringify(payload,null,2)}};
+ }},
+
+{id:4,name:"Recommendation API capacity",sub:"Will enrichment fit the window?",q:"Can the recommendation calls for this audience finish inside the delivery preparation window?",
+ inputs:[["aud","Recipients","num",500000,{step:10000}],["batch","Recipients per API call","num",100,{step:50}],["lat","Average API latency","num",600,{suf:"ms",step:50}],["par","Parallel calls","num",4],["win","Preparation window","num",20,{suf:"min"}],["fail","Timeouts that fall back","num",0.5,{suf:"%",step:.1}]],
+ calc:function(v){
+  var calls=Math.ceil(v.aud/v.batch), mins=Math.ceil(calls/v.par)*v.lat/60000, perSec=v.par*1000/v.lat*v.batch, need=Math.ceil(calls*v.lat/(v.win*60000));
+  var fits=mins<=v.win, tight=mins>v.win*0.7;
+  var st=!fits?"stop":tight?"warn":"ok";
+  return {verdict:[st,!fits?"Does not fit: needs "+fmt(mins,1)+" min. Raise parallel calls to at least "+need+" or enlarge batches.":tight?"Fits, but uses "+fmt(mins/v.win*100,0)+"% of the window. Little room for retries.":"Fits comfortably in "+fmt(mins,1)+" min."],
+   stats:[["API calls",fmt(calls),"per send"],["Run time",fmt(mins,1)+" min","of a "+fmt(v.win)+" min window"],["Throughput",fmt(perSec)+"/s","recipients per second"],["Fallback emails",fmt(v.aud*v.fail/100),"bestseller layout"]],
+   bars:[["Run time",mins,fmt(mins,1)+" min",Math.max(mins,v.win)],["Window",v.win,fmt(v.win)+" min",Math.max(mins,v.win)]],
+   notes:["Cache picks per recipient for the send day so retries do not call the engine twice.","Send hashed customer IDs, never email addresses."],
+   code:{lang:"JSON · enrichment activity settings",text:JSON.stringify({endpointOption:"cus_recApiUrl",auth:"external account (OAuth client credentials)",batchSize:v.batch,parallelCalls:Math.max(v.par,need),timeoutMs:Math.round(v.lat*7.5),onTimeout:"bestsellerFallback",slots:4,stockRule:"swap if stock < safety level"},null,2)}};
+ }},
+
+{id:5,name:"Pressure rule simulator",sub:"Who gets in, who is held",q:"For one customer's planned messages, which ones send and which are held under the pressure rule?",
+ inputs:[["cap","Max commercial messages","num",2],["win","Rolling window","num",7,{suf:"days"}],
+  ["plan","Planned messages (day, team, message, typology, weight)","area","1, Cards, Rate-cut offer, commercial, 8\n1, Mortgages, Equity newsletter, commercial, 4\n1, Security, New device alert, transactional, 0\n2, Education, Budgeting guide, commercial, 2\n3, Cards, Cashback reminder, commercial, 5\n6, Mortgages, Equity newsletter (retry), commercial, 4\n9, Cards, Rate-cut reminder, commercial, 7",{wide:1,rows:9}]],
+ calc:function(v){
+  var items=(v.plan||"").split(/\n/).map(function(l,i){var p=l.split(",").map(function(s){return s.trim()});if(p.length<5||!p[0])return null;return {i:i,day:+p[0],team:p[1],msg:p[2],typ:p[3].toLowerCase(),w:+p[4]}}).filter(Boolean);
+  items.sort(function(a,b){return a.day-b.day||b.w-a.w||a.i-b.i});
+  var sentDays=[],res=[];
+  items.forEach(function(m){
+    if(m.typ.indexOf("trans")===0){res.push([m,"ok","Bypass","Transactional, exempt from the cap"]);return}
+    var inWin=sentDays.filter(function(d){return d>m.day-v.win&&d<=m.day}).length;
+    if(inWin<v.cap){sentDays.push(m.day);res.push([m,"ok","Sent",(inWin+1)+" of "+v.cap+" in window"])}
+    else res.push([m,"warn","Held","Cap reached, logged PRESSURE_CAP"]);
+  });
+  var held=res.filter(function(r){return r[2]==="Held"}).length, sent=res.length-held;
+  var st=held===0?"ok":"warn";
+  return {verdict:[st,held?held+" of "+res.length+" messages held. Higher-weight messages won their days.":"Every message fits under the cap."],
+   stats:[["Sent",String(sent),"incl. transactional"],["Held",String(held),"written to exclusion log"],["Cap",v.cap+" per "+v.win+" days","rolling"]],
+   table:{cols:["Day","Team","Message","Weight","Result","Why"],rows:res.map(function(r){var m=r[0];return [String(m.day),m.team,m.msg,String(m.w),'<span class="pill '+r[1]+'">'+r[2]+'</span>',r[3]]}),raw:[4],num:[0,3]},
+   notes:["Messages on the same day are arbitrated by weight, highest first.","Format: one message per line, comma separated."],
+   code:{lang:"Configuration · typology rule",text:"Typology rule  Commercial pressure\n  Type ............ Pressure\n  Channel ......... Email\n  Period .......... "+v.win+" days, rolling\n  Max messages .... "+v.cap+" commercial per profile\n  Arbitration ..... highest delivery weight wins\n  Exempt .......... typology \"Transactional\"\n  Exclusion log ... nms:excludeLog, reason PRESSURE_CAP"}};
+ }},
+
+{id:6,name:"Preference matrix builder",sub:"Services from categories × cadence",q:"Which subscription services do you need for these categories and frequencies, and what is the downgrade path?",
+ inputs:[["prefix","Internal name prefix","txt","svc"],["chan","Channel","sel","Email",{opts:["Email","SMS"]}],["cats","Categories (comma separated)","txt","Menswear, Womenswear, Accessories, Outdoor",{wide:1}],["cad","Cadences offered","chk",["Weekly","Monthly"],{opts:["Daily","Weekly","Monthly","Quarterly"],wide:1}]],
+ calc:function(v){
+  var cats=(v.cats||"").split(",").map(function(s){return s.trim()}).filter(Boolean), cads=v.cad||[];
+  function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"")}
+  var rows=[];cats.forEach(function(c){cads.forEach(function(k){rows.push([v.prefix+"_"+slug(c)+"_"+slug(k),c+" · "+k.toLowerCase(),v.chan])})});
+  var order=["Daily","Weekly","Monthly","Quarterly"].filter(function(k){return cads.indexOf(k)>-1});
+  var st=rows.length===0?"stop":cads.length<2?"warn":"ok";
+  var xml='<package author="crm-ops" buildVersion="8" namespace="cus">\n  <entities schema="nms:service">\n'+rows.map(function(r){return '    <service internalName="'+r[0]+'" label="'+esc(r[1])+'" messageType="'+(v.chan==="SMS"?1:0)+'"/>'}).join("\n")+'\n  </entities>\n</package>';
+  return {verdict:[st,st==="stop"?"Add at least one category and one cadence.":st==="warn"?"Only one cadence: customers can't downgrade, only opt out. Offer at least two.":rows.length+" services. Customers can step down "+(order.length-1===1?"once":(order.length-1)+" times")+" before opting out."],
+   stats:[["Services",String(rows.length),cats.length+" categories × "+cads.length+" cadences"],["Downgrade steps",String(Math.max(0,order.length-1)),"before full opt-out"]],
+   table:{cols:["Internal name","Label","Channel"],rows:rows},
+   notes:["Downgrade path: "+(order.length?order.join(" → ")+" → opt-out":"none")+".","Log every change to cus:preferenceAudit with a timestamp and source."],
+   code:{lang:"XML · service import package",text:xml}};
+ }},
+
+{id:7,name:"Lead score calculator",sub:"Points, decay and MQL",q:"Where does this lead score today, and what would push it over the MQL threshold?",
+ inputs:[["g","Scoring model"],["pOpen","Points per email open","num",5],["pDocs","Points per docs click","num",15],["pPrice","Points per pricing visit","num",50],["decay","Decay per idle week","num",10],["thr","MQL threshold","num",100],
+  ["g","This lead"],["start","Score before this period","num",20],["opens","Email opens","num",3],["docs","Docs clicks","num",1],["price","Pricing visits","num",0],["idle","Idle weeks","num",0]],
+ calc:function(v){
+  var a=v.opens*v.pOpen,b=v.docs*v.pDocs,c=v.price*v.pPrice,d=v.idle*v.decay;
+  var s=Math.max(0,v.start+a+b+c-d), gap=Math.max(0,v.thr-s), mql=s>=v.thr;
+  var visits=Math.ceil(gap/Math.max(1,v.pPrice)), clicks=Math.ceil(gap/Math.max(1,v.pDocs));
+  return {verdict:[mql?"ok":"warn",mql?"MQL: stop nurture and create a sales task.":"Not yet an MQL. "+fmt(gap)+" points to go: about "+visits+" pricing visit"+(visits>1?"s":"")+" or "+clicks+" docs clicks."],
+   stats:[["Score",fmt(s),"threshold "+fmt(v.thr)],["Points to MQL",fmt(gap),""],["Stage",mql?"MQL":"Nurture",""]],
+   bars:[["Carried over",v.start,fmt(v.start)],["Opens",a,"+"+fmt(a)],["Docs clicks",b,"+"+fmt(b)],["Pricing visits",c,"+"+fmt(c)],["Decay",d,"−"+fmt(d)]],
+   notes:["Opens are inflated by Mail Privacy Protection; keep their weight low.","Decay keeps old interest from triggering sales calls."],
+   code:{lang:"JavaScript · scoring rules",text:"var POINTS = { emailOpen: "+v.pOpen+", docsClick: "+v.pDocs+", pricingVisit: "+v.pPrice+" };\nvar DECAY_PER_IDLE_WEEK = "+v.decay+";\nvar MQL_THRESHOLD = "+v.thr+";\n\nfunction score(lead) {\n  var s = lead.leadScore\n        + lead.opens         * POINTS.emailOpen\n        + lead.docsClicks    * POINTS.docsClick\n        + lead.pricingVisits * POINTS.pricingVisit\n        - lead.idleWeeks     * DECAY_PER_IDLE_WEEK;\n  return Math.max(0, s);\n}"}};
+ }},
+
+{id:8,name:"Voucher pool sizing",sub:"Codes, waves and top-ups",q:"Is the code pool big enough for every wave, and when should a top-up be triggered?",
+ inputs:[["pool","Codes in the pool","num",620000,{step:10000}],["w1","Wave 1 audience","num",500000,{step:10000}],["w2","Wave 2 audience","num",150000,{step:10000}],["w3","Wave 3 audience","num",0,{step:10000}],["thr","Top-up alert below","num",15,{suf:"%"}],["red","Expected redemption","num",9.4,{suf:"%",step:.1}],["val","Voucher value","num",25,{suf:"€"}]],
+ calc:function(v){
+  var avail=v.pool,rows=[],blocked=0,waves=[v.w1,v.w2,v.w3].filter(function(x){return x>0});
+  waves.forEach(function(a,i){
+    if(avail>=a){avail-=a;rows.push(["Wave "+(i+1),fmt(a),fmt(avail),'<span class="pill ok">Sent</span>'])}
+    else{blocked++;rows.push(["Wave "+(i+1),fmt(a),fmt(avail),'<span class="pill stop">Blocked</span>'])}
+  });
+  var total=waves.reduce(function(s,x){return s+x},0), short=Math.max(0,total-v.pool), alertAt=Math.round(v.pool*v.thr/100);
+  var sent=total-(blocked?waves.filter(function(a,i){return rows[i][3].indexOf("Blocked")>-1}).reduce(function(s,x){return s+x},0):0);
+  var st=blocked?"stop":avail<alertAt?"warn":"ok";
+  return {verdict:[st,blocked?blocked+" wave"+(blocked>1?"s":"")+" blocked by the depletion guard. Top up at least "+fmt(short)+" codes first.":st==="warn"?"All waves fit, but the pool ends below the "+v.thr+"% alert level. Request a top-up now.":"Every wave fits with "+fmt(avail)+" codes to spare."],
+   stats:[["Codes needed",fmt(total),"all waves"],["Shortfall",fmt(short),""],["Alert fires at",fmt(alertAt),"codes left"],["Expected redemptions",fmt(sent*v.red/100),eur(sent*v.red/100*v.val)+" discount"]],
+   table:{cols:["Wave","Audience","Codes left after","Result"],rows:rows,raw:[3],num:[1,2]},
+   notes:["Reserve codes atomically at delivery preparation so two sends never get the same code.","Free reservations from deliveries that never sent."],
+   code:{lang:"JavaScript · depletion guard",text:"// Runs before each wave's delivery preparation\nvar available = sqlGetInt(\n  \"SELECT COUNT(*) FROM CusCouponPool WHERE sPromoId = $(sz) AND iStatus = 0\", vars.promoId);\nvar audience = vars.recCount;\nif (available < audience) {\n  logError('Pool too small: ' + available + ' codes for ' + audience + ' recipients');\n}\nif (available - audience < "+alertAt+") {\n  logWarning('Pool will drop below "+v.thr+"%: request a top-up batch');\n}"}};
+ }},
+
+{id:9,name:"Privacy request tracker",sub:"Deadlines and purge checklist",q:"When is this request due, and which systems still need to be cleared?",
+ inputs:[["reg","Regulation","sel","GDPR",{opts:["GDPR","UK GDPR","CCPA","LGPD"]}],["type","Request type","sel","Delete",{opts:["Delete","Access"]}],["rec","Verified on","date",ymd(addDays(TODAY,-5))],
+  ["done","Cleared so far","chk",["nms:recipient profile","nms:broadLogRcp (sends)"],{opts:["nms:recipient profile","nms:broadLogRcp (sends)","nms:trackingLogRcp (opens, clicks)","nms:subscription","cus:* custom tables","Warehouse / FDA mirror","Backup expiry documented"],wide:1}]],
+ calc:function(v){
+  var r=new Date(v.rec+"T00:00:00"), due, ext, rule;
+  if(v.reg==="GDPR"||v.reg==="UK GDPR"){due=addMonths(r,1);ext=addMonths(r,3);rule="1 month, extendable by 2 more"}
+  else if(v.reg==="CCPA"){due=addDays(r,45);ext=addDays(r,90);rule="45 days, extendable by 45 more"}
+  else {due=addDays(r,15);ext=null;rule="15 days"}
+  var left=Math.round((due-TODAY)/864e5), all=7, done=(v.done||[]).length, prog=Math.round(done/all*100);
+  var st=left<0?"stop":left<=7&&prog<100?"warn":"ok";
+  return {verdict:[st,left<0?"Overdue by "+(-left)+" days.":prog===100?"All systems cleared. Send the receipt.":left+" days left, "+(all-done)+" systems still to clear."],
+   stats:[["Due",ymd(due),rule],["Days left",String(left),""],["Extended due",ext?ymd(ext):"—","if extension notified"],["Progress",prog+"%",done+" of "+all+" cleared"]],
+   bars:[["Cleared",done,done+" / "+all,all]],
+   notes:["Check the current legal deadline with your DPO; rules and guidance change.",v.type==="Access"?"For access requests, export the data instead of purging.":"Purge linked log tables before the profile so nothing is orphaned."],
+   code:{lang:"JSON · completion receipt",text:JSON.stringify({requestType:v.type.toLowerCase(),regulation:v.reg,verifiedOn:v.rec,dueBy:ymd(due),systemsCleared:v.done||[],status:prog===100?"complete":"in progress",subjectHash:"sha256(<lower-cased email>)"},null,2)}};
+ }},
+
+{id:10,name:"ETL volume estimator",sub:"Nightly rows, size, transfer",q:"How much log data does the nightly extract move, and how long does the transfer take?",
+ inputs:[["sends","Messages sent per day","num",2000000,{step:100000}],["open","Opens per message","num",25,{suf:"%"}],["click","Clicks per message","num",3,{suf:"%",step:.1}],["bytes","Average bytes per row","num",180],["comp","Compression ratio","num",8,{suf:"×"}],["bw","Upload bandwidth","num",50,{suf:"Mbit/s"}],["purge","Tracking log retention","num",180,{suf:"days"}]],
+ calc:function(v){
+  var opens=v.sends*v.open/100, clicks=v.sends*v.click/100, rows=v.sends+opens+clicks;
+  var raw=rows*v.bytes/1048576, gz=raw/v.comp, secs=gz*8/v.bw;
+  var st=secs>3600?"warn":"ok";
+  return {verdict:[st,st==="warn"?"Transfer takes over an hour. Split by table or increase bandwidth.":"Nightly transfer takes about "+fmt(secs/60,1)+" min."],
+   stats:[["Rows per night",fmt(rows),""],["Raw size",fmt(raw,0)+" MB",""],["Compressed",fmt(gz,0)+" MB",fmt(v.comp)+"× smaller"],["Transfer",fmt(secs/60,1)+" min","at "+v.bw+" Mbit/s"]],
+   bars:[["Sends",v.sends,fmt(v.sends)],["Opens",opens,fmt(opens)],["Clicks",clicks,fmt(clicks)]],
+   notes:["Extract well inside the "+v.purge+"-day log retention so cleanup never removes unexported rows.","Advance the watermark only after a confirmed transfer."],
+   code:{lang:"SQL · incremental extract",text:"-- Sends since the last watermark\nSELECT iBroadLogId, iDeliveryId, iRecipientId, iStatus, tsEvent\nFROM   NmsBroadLogRcp\nWHERE  tsEvent >  :watermark\n  AND  tsEvent <= :runStart;\n\n-- Opens and clicks since the last watermark\nSELECT iTrackingLogId, iDeliveryId, iRecipientId, iUrlId, tsLog\nFROM   NmsTrackingLogRcp\nWHERE  tsLog >  :watermark\n  AND  tsLog <= :runStart;\n\n-- Expected tonight: ~"+fmt(rows)+" rows, ~"+fmt(gz,0)+" MB compressed"}};
+ }}
+];
+
+/* ---------- state ---------- */
+function defaults(t){var o={};t.inputs.forEach(function(i){if(i[0]!=="g")o[i[0]]=Array.isArray(i[3])?i[3].slice():i[3]});return o}
+function load(t){var o=defaults(t);try{var s=JSON.parse(localStorage.getItem("cotk:"+t.id)||"null");if(s)for(var k in s)if(k in o)o[k]=s[k]}catch(e){}return o}
+function save(t,v){try{localStorage.setItem("cotk:"+t.id,JSON.stringify(v))}catch(e){}}
+
+/* ---------- rendering ---------- */
+var nav=document.getElementById("nav"),main=document.getElementById("main"),cur=null,vals=null;
+nav.innerHTML=TOOLS.map(function(t){return '<button role="tab" id="tab-'+t.id+'" data-id="'+t.id+'"><span class="n">'+String(t.id).padStart(2,"0")+'</span><span>'+esc(t.name)+'<small>'+esc(t.sub)+'</small></span></button>'}).join("");
+nav.addEventListener("click",function(e){var b=e.target.closest("button");if(b)location.hash="t-"+b.dataset.id});
+
+function inputHTML(t){
+  var h="",open=false;
+  function close(){if(open){h+='</div>';open=false}}
+  t.inputs.forEach(function(i){
+    if(i[0]==="g"){close();h+='<div class="grp">'+esc(i[1])+'</div>';return}
+    if(!open){h+='<div class="fields">';open=true}
+    var id="in-"+t.id+"-"+i[0],o=i[4]||{},v=vals[i[0]],w=(o.wide||i[2]==="area"||i[2]==="chk")?" wide":"";
+    h+='<div class="f'+w+'"><label for="'+id+'">'+esc(i[1])+'</label>';
+    if(i[2]==="num") h+='<div class="in"><input id="'+id+'" data-k="'+i[0]+'" type="number" inputmode="decimal" step="'+(o.step||1)+'" value="'+esc(v)+'">'+(o.suf?'<span class="suf">'+esc(o.suf)+'</span>':'')+'</div>';
+    else if(i[2]==="txt") h+='<div class="in"><input id="'+id+'" data-k="'+i[0]+'" type="text" value="'+esc(v)+'"></div>';
+    else if(i[2]==="date") h+='<div class="in"><input id="'+id+'" data-k="'+i[0]+'" type="date" value="'+esc(v)+'"></div>';
+    else if(i[2]==="sel") h+='<div class="in"><select id="'+id+'" data-k="'+i[0]+'">'+o.opts.map(function(x){return '<option'+(x===v?' selected':'')+'>'+esc(x)+'</option>'}).join("")+'</select></div>';
+    else if(i[2]==="area") h+='<div class="in"><textarea id="'+id+'" data-k="'+i[0]+'" rows="'+(o.rows||8)+'" spellcheck="false">'+esc(v)+'</textarea></div>';
+    else if(i[2]==="chk") h+='<div class="checks" id="'+id+'" role="group">'+o.opts.map(function(x,j){return '<label><input type="checkbox" data-k="'+i[0]+'" value="'+esc(x)+'"'+(v.indexOf(x)>-1?' checked':'')+'>'+esc(x)+'</label>'}).join("")+'</div>';
+    h+='</div>';
+  });
+  close();return h;
+}
+function resultHTML(r){
+  var h='';
+  if(r.verdict)h+='<div class="verdict '+r.verdict[0]+'"><b>'+({ok:"Pass",warn:"Check",stop:"Blocked"})[r.verdict[0]]+'</b><span>'+esc(r.verdict[1])+'</span></div>';
+  if(r.stats)h+='<div class="stats">'+r.stats.map(function(s){return '<div class="stat"><div class="v">'+esc(s[0]==null?"":s[1])+'</div><div class="l">'+esc(s[0])+'</div>'+(s[2]?'<div class="nt">'+esc(s[2])+'</div>':'')+'</div>'}).join("")+'</div>';
+  if(r.bars){var mx=Math.max.apply(null,r.bars.map(function(b){return b[3]||b[1]}).concat([1]));h+='<div class="bars">'+r.bars.map(function(b){var m=b[3]||mx;return '<div class="bar"><span>'+esc(b[0])+'</span><div class="tr"><div class="fl" style="width:'+Math.max(0,Math.min(100,b[1]/m*100)).toFixed(1)+'%"></div></div><span class="bv">'+esc(b[2])+'</span></div>'}).join("")+'</div>'}
+  if(r.table){var raw=r.table.raw||[],num=r.table.num||[];h+='<div class="tbl"><table><thead><tr>'+r.table.cols.map(function(c){return '<th>'+esc(c)+'</th>'}).join("")+'</tr></thead><tbody>'+r.table.rows.map(function(row){return '<tr>'+row.map(function(c,j){return '<td'+(num.indexOf(j)>-1?' class="num"':'')+'>'+(raw.indexOf(j)>-1?c:esc(c))+'</td>'}).join("")+'</tr>'}).join("")+'</tbody></table></div>'}
+  if(r.notes)h+='<ul class="notes">'+r.notes.map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul>';
+  return h;
+}
+function readVals(t){
+  var v={};
+  t.inputs.forEach(function(i){
+    if(i[0]==="g")return;
+    if(i[2]==="chk"){v[i[0]]=[].slice.call(main.querySelectorAll('input[type=checkbox][data-k="'+i[0]+'"]:checked')).map(function(x){return x.value});return}
+    var el=main.querySelector('[data-k="'+i[0]+'"]');
+    if(!el){v[i[0]]=vals[i[0]];return}
+    v[i[0]]=i[2]==="num"?(el.value===""?0:parseFloat(el.value)):el.value;
+  });
+  return v;
+}
+function update(){
+  var t=cur;vals=readVals(t);save(t,vals);
+  var r;try{r=t.calc(vals)}catch(e){r={verdict:["stop","Check the inputs: "+e.message]}}
+  document.getElementById("results").innerHTML=resultHTML(r);
+  var c=document.getElementById("codeblock");
+  if(r.code){c.hidden=false;document.getElementById("codelang").textContent=r.code.lang;document.getElementById("codepre").textContent=r.code.text}else c.hidden=true;
+}
+function show(id){
+  var t=TOOLS.filter(function(x){return x.id===id})[0]||TOOLS[0];cur=t;vals=load(t);
+  nav.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-selected",String(+b.dataset.id===t.id))});
+  document.getElementById("atlasLink").href="https://sghatge.github.io/campaign-frameworks-atlas/#uc-"+t.id;
+  main.innerHTML='<div class="tool-head"><div><div class="eyebrow">Tool '+String(t.id).padStart(2,"0")+' · Framework '+String(t.id).padStart(2,"0")+' in the Atlas</div><h2>'+esc(t.name)+'</h2><p class="q">'+esc(t.q)+'</p></div>'+
+   '<div class="acts"><button class="btn" id="reset">Reset to example</button></div></div>'+
+   '<div class="bench"><div class="panel"><div class="eyebrow">Inputs</div>'+inputHTML(t)+'</div><div class="panel"><div class="eyebrow">Results</div><div id="results"></div></div></div>'+
+   '<div class="code" id="codeblock"><div class="code-h"><span id="codelang"></span><button id="copy">Copy</button></div><pre id="codepre"></pre></div>';
+  main.querySelectorAll("input,select,textarea").forEach(function(el){function h(){if(cur===t&&main.contains(el))update()}el.addEventListener("input",h);el.addEventListener("change",h)});
+  document.getElementById("reset").onclick=function(){try{localStorage.removeItem("cotk:"+t.id)}catch(e){}show(t.id)};
+  document.getElementById("copy").onclick=function(){var b=this,txt=document.getElementById("codepre").textContent;
+    function ok(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy"},1500)}
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById("codepre"));var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    try{navigator.clipboard.writeText(txt).then(ok,sel)}catch(e){sel()}};
+  update();
+}
+function route(){var m=/^#t-(\d+)$/.exec(location.hash);show(m?+m[1]:1)}
+window.addEventListener("hashchange",route);
+route();
+</script>
+
+</body>
+</html>

@@ -84,6 +84,10 @@ header h1 span{color:var(--accent)}
 .nav{display:flex;gap:6px}
 .nav button{font:500 13px var(--body);background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
 .nav button:hover{border-color:var(--accent)}
+.nav{flex-wrap:wrap;justify-content:flex-end}
+.nav a.tk{font:500 13px var(--body);background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:8px 12px;text-decoration:none;white-space:nowrap}
+.tk-link{display:inline-flex;align-self:start;margin-top:6px;font:500 13.5px var(--body);background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:9px 14px;text-decoration:none}
+.tk-link:hover,.nav a.tk:hover{filter:brightness(1.08)}
 
 .sec{margin-top:34px}
 .sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
@@ -226,6 +230,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 40px;color:var(--mute
         <dt>50</dt><dd>implementation steps, each mapped to a Campaign schema or workflow activity</dd>
         <dt>3</dt><dd>layers per build: data in, Campaign core, channels and systems out</dd>
       </dl>
+      <a class="tk-link" href="https://sghatge.github.io/campaign-frameworks-atlas/toolkit/" target="_blank" rel="noopener">Open the Campaign Ops Toolkit ↗</a>
       <p style="margin:4px 0 0;font-size:12.5px;color:var(--muted)">Prepared by Sangram G. · CRM &amp; Marketing Ops architecture</p>
     </div>
   </div>
@@ -928,7 +933,7 @@ function render(id){
      '<div class="eyebrow">'+esc(u.group)+' · Build effort: '+esc(u.effort)+' (indicative)</div>'+
      '<h2 id="sheet-title">'+esc(u.title)+'</h2><p class="purpose">'+esc(u.purpose)+'</p>'+
      '<div class="chips">'+u.chips.map(function(c){return '<span class="chip">'+esc(c)+'</span>'}).join("")+'</div></div>'+
-     '<div class="nav"><button id="prev" aria-label="Previous framework">← Prev</button><button id="next" aria-label="Next framework">Next →</button></div></div>';
+     '<div class="nav"><a class="tk" href="https://sghatge.github.io/campaign-frameworks-atlas/toolkit/#t-'+id+'" target="_blank" rel="noopener">Try it in the toolkit ↗</a><button id="prev" aria-label="Previous framework">← Prev</button><button id="next" aria-label="Next framework">Next →</button></div></div>';
 
   h+='<section class="sec"><div class="sec-h"><h3>Business case</h3></div><div class="biz">'+
      '<div><div class="eyebrow">Problem</div><p>'+esc(u.problem)+'</p></div>'+
