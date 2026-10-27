@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ten Adobe Campaign v8 frameworks with architecture diagrams, workflow canvases, set-up screens and simulated test runs.">
+<meta name="author" content="Sangram G.">
+<meta property="og:title" content="Campaign Frameworks Atlas">
+<meta property="og:description" content="Ten Adobe Campaign v8 frameworks with architecture diagrams, workflow canvases, set-up screens and simulated test runs.">
+<meta property="og:type" content="website">
+<title>Campaign Frameworks Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Layout: atlas index of 10 tiles on top, one deep "build sheet" per framework below; diagrams are the hero of each sheet */
+:root{
+  --paper:#F2F5F7; --panel:#FFFFFF; --ink:#13212C; --muted:#5A6977; --line:#D3DCE3; --soft:#E7EDF1;
+  --accent:#0E6B78; --accent-ink:#FFFFFF; --ai:#A85A12; --ai-soft:#F6E9DB;
+  --k-start:#3A6FC4; --k-query:#0E6B78; --k-flow:#5B6B7A; --k-code:#6E4FB8; --k-data:#5E7F1E; --k-send:#C2410C; --k-end:#8A96A2; --k-alert:#B42335;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0D151B; --panel:#131E26; --ink:#E4ECF1; --muted:#93A3B0; --line:#26343F; --soft:#1A2731;
+  --accent:#4DC0CB; --accent-ink:#06191C; --ai:#EBA460; --ai-soft:#2C2117;
+  --k-start:#7FA6EA; --k-query:#4DC0CB; --k-flow:#A3B1BD; --k-code:#AA92EC; --k-data:#A5C85A; --k-send:#F28A55; --k-end:#7D8A96; --k-alert:#F07884;
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#0D151B; --panel:#131E26; --ink:#E4ECF1; --muted:#93A3B0; --line:#26343F; --soft:#1A2731;
+  --accent:#4DC0CB; --accent-ink:#06191C; --ai:#EBA460; --ai-soft:#2C2117;
+  --k-start:#7FA6EA; --k-query:#4DC0CB; --k-flow:#A3B1BD; --k-code:#AA92EC; --k-data:#A5C85A; --k-send:#F28A55; --k-end:#7D8A96; --k-alert:#F07884;
+  color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:15px/1.6 var(--body);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+code,pre{font-family:var(--mono)}
+.eyebrow{font:500 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+header{padding-block:40px 28px;border-bottom:1px solid var(--line)}
+.top{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:end}
+header h1{font-size:clamp(34px,5.4vw,60px);font-weight:700;letter-spacing:-.02em}
+header h1 span{color:var(--accent)}
+.lede{font-size:17px;color:var(--muted);max-width:60ch;margin:14px 0 0}
+.summary{border-left:1px solid var(--line);padding-left:24px;display:grid;gap:10px}
+.summary dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0}
+.summary dt{font:600 26px/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+.summary dd{margin:0;color:var(--muted);font-size:13.5px;align-self:center}
+
+/* index */
+.index{padding-block:28px 8px}
+.groups{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.group h2{font:500 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.tiles{display:grid;gap:8px}
+.tile{all:unset;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:10px 12px;border:1px solid var(--line);background:var(--panel);border-radius:6px;transition:border-color .15s,transform .15s}
+.tile:hover{border-color:var(--accent)}
+.tile:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tile .n{font:500 12px/1.5 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tile .t{font:500 13.5px/1.35 var(--body)}
+.tile[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tile[aria-selected="true"] .n{color:var(--accent-ink);opacity:.8}
+
+/* sheet */
+.sheet{padding-block:30px 60px}
+.sheet-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:start;padding-bottom:22px;border-bottom:2px solid var(--ink)}
+.bignum{font:700 64px/0.9 var(--display);color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.sheet-head h2{font-size:clamp(24px,3.2vw,36px);font-weight:700;letter-spacing:-.01em}
+.purpose{margin:10px 0 0;max-width:72ch;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{font:500 11.5px/1 var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:var(--panel)}
+.nav{display:flex;gap:6px}
+.nav button{font:500 13px var(--body);background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
+.nav button:hover{border-color:var(--accent)}
+
+.sec{margin-top:34px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.sec-h h3{font-size:20px;font-weight:700}
+.sec-h p{margin:0;color:var(--muted);font-size:13.5px}
+
+.biz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.biz > div{padding:18px 20px;min-width:0}
+.biz > div + div{border-left:1px solid var(--line)}
+.biz h4{margin:0 0 8px}
+.biz p{margin:0;font-size:14.5px}
+
+.timeline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;counter-reset:none}
+.timeline li{position:relative;padding:18px 18px 0 0;border-top:2px solid var(--line);min-width:0}
+.timeline li::before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--accent)}
+.timeline .when{font:600 13px/1.3 var(--mono);color:var(--accent);display:block;margin-bottom:4px}
+.timeline p{margin:0;font-size:14px}
+
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.fig svg{display:block}
+.fig-cap{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+/* trace */
+.trace-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+.trace-bar button{font:500 12px var(--body);background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:4px 10px;cursor:pointer;flex:none}
+.nd .halo{opacity:0;transition:opacity .2s}
+.ed{transition:stroke .2s,opacity .2s}
+svg.tracing .nd{opacity:.32;transition:opacity .25s}
+svg.tracing .nd.hit{opacity:1}
+svg.tracing .nd.hit .halo{opacity:1}
+svg.tracing .ed{opacity:.25}
+svg.tracing .ed.hit{opacity:1;stroke:var(--accent);stroke-width:3}
+/* test run */
+.testgrid{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:20px;align-items:start}
+.tbl-wrap{position:relative;overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.tt{width:100%;border-collapse:collapse;font-size:13.5px}
+.tt th{text-align:left;font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tt td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tt tr:last-child td{border-bottom:0}
+.tt td.mono{font:500 12.5px var(--mono);white-space:nowrap}
+.tt tr.sel td{background:var(--soft)}
+.pill{display:inline-block;font:600 10.5px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:4px 6px;border-radius:3px;margin-right:4px;vertical-align:1px}
+.pill.ok{background:color-mix(in srgb,var(--k-data) 18%,transparent);color:var(--k-data)}
+.pill.warn{background:color-mix(in srgb,var(--ai) 18%,transparent);color:var(--ai)}
+.pill.stop{background:color-mix(in srgb,var(--k-alert) 16%,transparent);color:var(--k-alert)}
+.trace{font:500 12px var(--body);white-space:nowrap;background:var(--accent);color:var(--accent-ink);border:0;border-radius:4px;padding:5px 10px;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.cohort .cl{margin:4px 0 12px;font:600 15px/1.35 var(--body)}
+.cohort dl{margin:0;display:grid;gap:0}
+.cohort dl div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px}
+.cohort dt{color:var(--muted)}
+.cohort dd{margin:0;font:600 13px var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.kpi-note{margin-top:8px;font:500 11px var(--mono);color:var(--muted)}
+@media (max-width:980px){.testgrid{grid-template-columns:minmax(0,1fr)}}
+.scroll-hint{margin-left:auto;color:var(--accent);font-weight:500}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.lg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+.build{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.steps li:first-child{padding-top:0}
+.steps li::before{content:counter(s);font:700 15px/32px var(--display);width:30px;height:30px;text-align:center;border-radius:50%;border:1.5px solid var(--ink)}
+.steps h4{margin:0 0 3px;font:600 14.5px/1.35 var(--body)}
+.steps p{margin:0;font-size:14px;color:var(--muted)}
+.steps code{font-size:12.5px;color:var(--ink);background:var(--soft);padding:1px 4px;border-radius:3px}
+.side{display:grid;gap:20px;min-width:0}
+.code{background:#0F1A21;color:#D6E2EA;border-radius:8px;overflow:hidden}
+.win{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 8px 24px -14px rgba(10,30,40,.35);font-size:13px}
+.win-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--soft);border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;min-width:0}
+.win-bar b{color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.win-ico{width:12px;height:12px;border-radius:3px;background:var(--accent);flex:none}
+.win-tabs{display:flex;gap:2px;padding:6px 10px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.win-tabs span{padding:6px 10px;font-size:12px;color:var(--muted);border:1px solid transparent;border-bottom:0;border-radius:5px 5px 0 0;white-space:nowrap}
+.win-tabs span.on{color:var(--ink);background:var(--panel);border-color:var(--line);margin-bottom:-1px;font-weight:600}
+.win-body{padding:12px 14px;display:grid;gap:7px}
+.fld{display:grid;grid-template-columns:132px minmax(0,1fr);gap:10px;align-items:center}
+.fld label{color:var(--muted);font-size:12.5px}
+.val{border:1px solid var(--line);border-radius:4px;padding:5px 8px;background:var(--paper);font:12.5px/1.4 var(--mono);color:var(--ink);overflow-wrap:anywhere}
+.val.chk{border:0;background:transparent;padding-left:0;font-family:var(--body);display:flex;gap:8px;align-items:center}
+.val.chk i{font-style:normal;width:16px;height:16px;flex:none;border-radius:3px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:11px}
+.win-foot{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.win-foot span:first-child{margin-right:auto;font-family:var(--mono)}
+.win-foot .btn{padding:4px 14px;border-radius:4px;background:var(--accent);color:var(--accent-ink);font-weight:600}
+.win-foot .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:400}
+@media (max-width:480px){.fld{grid-template-columns:1fr;gap:3px}}
+.code-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;background:#18262F;font:500 12px var(--mono);color:#9FB3C1}
+.code-h button{font:500 12px var(--mono);background:transparent;color:#D6E2EA;border:1px solid #33434E;border-radius:4px;padding:4px 8px;cursor:pointer}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font-size:12.5px;line-height:1.6;white-space:pre}
+
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 20px;min-width:0}
+.card h4{margin:0 0 10px;font:600 15px var(--body)}
+.kv{display:grid;gap:10px;margin:0}
+.kv dt{font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kv dd{margin:2px 0 0;font-size:14px}
+.ai{background:var(--ai-soft);border-color:transparent}
+.ai .eyebrow{color:var(--ai)}
+.kpis{display:grid;gap:8px;margin-top:12px}
+.kpi small{display:block;font-size:12px;color:var(--muted);line-height:1.4;margin-top:2px}
+.kpi{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--ai) 30%,transparent);font-size:13.5px}
+.kpi b{font:600 13px var(--mono);white-space:nowrap;color:var(--ai)}
+.kpi b.tbd{font-weight:500;color:var(--muted)}
+.risk{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.risk li{font-size:14px;padding-left:14px;border-left:2px solid var(--k-alert)}
+.risk li strong{display:block;font-weight:600}
+.risk li span{color:var(--muted)}
+
+footer{border-top:1px solid var(--line);padding-block:20px 40px;color:var(--muted);font-size:13px}
+
+@media (max-width:980px){
+  .groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .top{grid-template-columns:1fr}
+  .summary{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:16px}
+  .build,.trio{grid-template-columns:minmax(0,1fr)}
+  .side > div,.steps,.win{min-width:0}
+  .code{position:static}
+}
+@media (max-width:640px){
+  .groups{grid-template-columns:1fr}
+  .biz{grid-template-columns:1fr}
+  .biz > div + div{border-left:0;border-top:1px solid var(--line)}
+  .sheet-head{grid-template-columns:1fr}
+  .bignum{font-size:44px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap top">
+    <div>
+      <div class="eyebrow">Adobe Campaign Classic v8 · Solution architecture</div>
+      <h1>Campaign Frameworks <span>Atlas</span></h1>
+      <p class="lede">Ten production patterns for Adobe Campaign v8. Each one shows the business problem it fixes, how the solution is wired, the workflow you would build, and where AI moves the numbers.</p>
+    </div>
+    <div class="summary">
+      <div class="eyebrow">At a glance</div>
+      <dl>
+        <dt>10</dt><dd>frameworks across revenue, governance, reliability, privacy and insight</dd>
+        <dt>50</dt><dd>implementation steps, each mapped to a Campaign schema or workflow activity</dd>
+        <dt>3</dt><dd>layers per build: data in, Campaign core, channels and systems out</dd>
+      </dl>
+      <p style="margin:4px 0 0;font-size:12.5px;color:var(--muted)">Prepared by Sangram G. · CRM &amp; Marketing Ops architecture</p>
+    </div>
+  </div>
+</header>
+
+<section class="index">
+  <div class="wrap">
+    <div class="groups" id="groups" role="tablist" aria-label="Frameworks"></div>
+  </div>
+</section>
+
+<main class="sheet">
+  <div class="wrap" id="sheet"></div>
+</main>
+
+<footer>
+  <div class="wrap">All test records, test-group results and KPI values on this page are simulated test data, built to show how each framework behaves and how each KPI is measured. They are not results from a live client. Set-up screens use example values. Code samples are reference patterns for Adobe Campaign Classic v8 and are adapted to each instance's schemas before use.</div>
+</footer>
+
+<!-- Code samples -->
+<script type="text/plain" id="snip-1"><urn:PushEvent>
+  <urn:sessiontoken>…</urn:sessiontoken>
+  <urn:domEvent>
+    <rtEvent type="CART_ABANDONED" externalId="CUST-48213"
+             email="j.doe@example.com" mobilePhone="+30694…">
+      <ctx>
+        <cart id="C-99102" value="180.00" currency="EUR" step="shipping">
+          <item sku="JKT-221-M" name="Field jacket" size="M" price="180.00"/>
+        </cart>
+        <profile pushToken="1" loyaltyTier="1" smsOptIn="1"/>
+      </ctx>
+    </rtEvent>
+  </urn:domEvent>
+</urn:PushEvent>
+
+<!-- A later ORDER_COMPLETED event with the same cart id
+     closes the journey before the next channel fires. --></script>
+
+<script type="text/plain" id="snip-2">// Pre-flight check: runs per market delivery before approval
+var REQUIRED = {
+  DE: ['imprint', 'unsubscribe'],
+  AT: ['imprint', 'unsubscribe'],
+  GR: ['unsubscribe', 'privacy'],
+  DEFAULT: ['unsubscribe']
+};
+var d = NLWS.nmsDelivery.load(vars.deliveryId);
+var html = String(d.content.html.source);
+var tags = REQUIRED[vars.market] || REQUIRED.DEFAULT;
+
+var missing = tags.filter(function (tag) {
+  return html.indexOf('data-legal="' + tag + '"') === -1;
+});
+
+if (missing.length) {
+  logWarning(vars.market + ' blocked, missing: ' + missing.join(', '));
+  task.postEvent(task.transitionByName('fail'));
+} else {
+  task.postEvent(task.transitionByName('pass'));
+}</script>
+
+<script type="text/plain" id="snip-3">// Monitor: find failed workflows and post a card to chat
+var res = xtk.queryDef.create(
+  <queryDef schema="xtk:workflow" operation="select">
+    <select>
+      <node expr="@id"/><node expr="@internalName"/><node expr="@label"/>
+    </select>
+    <where><condition expr="@failed = 1"/></where>
+  </queryDef>).ExecuteQuery();
+
+for each (var wf in res.workflow) {
+  var req = new HttpClientRequest(getOption('cus_alertWebhookUrl'));
+  req.method = 'POST';
+  req.header['Content-Type'] = 'application/json';
+  req.body = JSON.stringify({
+    text: 'Workflow failed: ' + wf.@label + ' (' + wf.@internalName + ')',
+    severity: 'P2'
+  });
+  req.execute();
+}</script>
+
+<script type="text/plain" id="snip-4"><% var recs = targetData.recs ? JSON.parse(targetData.recs) : []; %>
+<% if (recs.length >= 4) { %>
+<table class="rec-grid" role="presentation">
+  <% for (var i = 0; i < 4; i++) { var r = recs[i]; %>
+    <% if (i % 2 == 0) { %><tr><% } %>
+    <td>
+      <img src="<%= r.img %>" alt="<%= r.name %>" width="260">
+      <p><%= r.name %> · <%= r.price %> €</p>
+      <a href="<%= r.url %>?utm_content=rec<%= i + 1 %>">Shop now</a>
+    </td>
+    <% if (i % 2 == 1) { %></tr><% } %>
+  <% } %>
+</table>
+<% } else { %>
+  <%@ include view="bestsellerFallback" %>
+<% } %></script>
+
+<script type="text/plain" id="snip-5">Typology rule  Commercial pressure (all divisions)
+  Type ............ Pressure
+  Channel ......... Email
+  Period .......... 7 days, rolling, from contact date
+  Max messages .... 2 commercial per profile
+  Weight .......... delivery priority weight (1-10)
+  Arbitration ..... highest weight wins, others deferred
+  Exempt .......... typology "Transactional" (security, service)
+  Exclusion log ... nms:excludeLog, reason PRESSURE_CAP
+
+Typology map
+  Transactional ........... no pressure rule
+  Commercial priority ..... weight 8-10
+  Commercial standard ..... weight 4-7
+  Educational ............. weight 1-3</script>
+
+<script type="text/plain" id="snip-6"><srcSchema name="preferenceAudit" namespace="cus" label="Preference audit">
+  <element name="preferenceAudit" autopk="true">
+    <attribute name="category" type="string" length="40" label="Category"/>
+    <attribute name="cadence"  type="string" length="20" label="Cadence"/>
+    <attribute name="action"   type="string" length="20" label="Action"/>
+    <attribute name="source"   type="string" length="40" label="Source"/>
+    <attribute name="eventDate" type="datetime" default="GetDate()"
+               label="Changed on"/>
+    <element name="recipient" type="link" target="nms:recipient"
+             label="Recipient"/>
+  </element>
+</srcSchema></script>
+
+<script type="text/plain" id="snip-7">// Daily scoring: points per behaviour since the last run
+var POINTS = { emailOpen: 5, docsClick: 15, pricingVisit: 50 };
+var DECAY_PER_IDLE_WEEK = 10;   // example value, tuned in discovery
+var MQL_THRESHOLD = 100;
+
+function score(lead) {
+  var s = lead.leadScore
+        + lead.opens         * POINTS.emailOpen
+        + lead.docsClicks    * POINTS.docsClick
+        + lead.pricingVisits * POINTS.pricingVisit;
+  if (lead.daysIdle >= 7)
+    s -= Math.floor(lead.daysIdle / 7) * DECAY_PER_IDLE_WEEK;
+  return Math.max(0, s);
+}
+
+// Leads with score >= MQL_THRESHOLD leave the nurture stream,
+// get @lifecycleStage = 'MQL' and a task in the CRM.</script>
+
+<script type="text/plain" id="snip-8">-- Reserve one code per recipient in one atomic statement (PostgreSQL)
+WITH free AS (
+  SELECT iCouponId, ROW_NUMBER() OVER (ORDER BY iCouponId) AS rn
+  FROM CusCouponPool
+  WHERE sPromoId = :promoId AND iStatus = 0        -- 0 = Available
+  ORDER BY iCouponId
+  LIMIT :audienceSize
+  FOR UPDATE SKIP LOCKED
+), targets AS (
+  SELECT iRecipientId, ROW_NUMBER() OVER (ORDER BY iRecipientId) AS rn
+  FROM :tempTable
+)
+UPDATE CusCouponPool c
+SET    iStatus = 1,                                  -- 1 = Reserved
+       iRecipientId = t.iRecipientId,
+       tsReserved = NOW()
+FROM   free f JOIN targets t ON t.rn = f.rn
+WHERE  c.iCouponId = f.iCouponId;</script>
+
+<script type="text/plain" id="snip-9">// Write an anonymised, hashed receipt once the purge completes
+var receipt = {
+  requestId:    vars.requestId,
+  regulation:   vars.regulation,        // 'GDPR-Art17' | 'CCPA'
+  subjectHash:  digestStrSha256(String(vars.subjectKey).toLowerCase()),
+  tablesPurged: vars.purgedTables,      // 'nms:recipient,nms:broadLogRcp,cus:orderMirror'
+  completedAt:  formatDate(new Date(), '%4Y-%2M-%2D %2H:%2N:%2S')
+};
+
+xtk.session.Write(
+  <privacyReceipt xtkschema="cus:privacyReceipt" _operation="insert"
+    requestId={receipt.requestId}  regulation={receipt.regulation}
+    subjectHash={receipt.subjectHash} tablesPurged={receipt.tablesPurged}
+    completedAt={receipt.completedAt}/>);
+
+// The receipt id is returned to the privacy portal as proof of completion.</script>
+
+<script type="text/plain" id="snip-10">-- Linear multi-touch attribution, 30-day lookback (Snowflake)
+WITH touches AS (
+  SELECT o.order_id, o.revenue, t.channel, t.campaign_id
+  FROM analytics.orders o
+  JOIN analytics.touchpoints t
+    ON  t.customer_id = o.customer_id
+    AND t.touched_at BETWEEN DATEADD(day, -30, o.ordered_at) AND o.ordered_at
+),
+weighted AS (
+  SELECT channel, campaign_id,
+         revenue / COUNT(*) OVER (PARTITION BY order_id) AS credit
+  FROM touches
+)
+SELECT channel, campaign_id, ROUND(SUM(credit), 2) AS attributed_revenue
+FROM weighted
+GROUP BY channel, campaign_id
+ORDER BY attributed_revenue DESC;</script>
+
+<script>
+var KINDS = {
+  start:{label:"Trigger",c:"--k-start"}, query:{label:"Targeting",c:"--k-query"}, flow:{label:"Flow control",c:"--k-flow"},
+  code:{label:"Script",c:"--k-code"}, data:{label:"Data in/out",c:"--k-data"}, send:{label:"Delivery",c:"--k-send"},
+  alert:{label:"Alert",c:"--k-alert"}, end:{label:"End",c:"--k-end"}
+};
+var TBD = "Set in discovery";
+var GROUPS = [
+  {name:"Revenue", ids:[1,4,8]},
+  {name:"Governance & scale", ids:[2,5]},
+  {name:"Reliability", ids:[3]},
+  {name:"Data & privacy", ids:[6,9]},
+  {name:"Pipeline & insight", ids:[7,10]}
+];
+
+var UC = [
+{ id:1, short:"Cart abandonment engine", title:"Cross-channel cart abandonment with fallback routing", group:"Revenue",
+  purpose:"Win back high-intent carts inside the engagement window by choosing the cheapest channel that still converts: push first, then email, then SMS for top-tier customers.",
+  problem:"Abandoned checkouts get no timely follow-up, or get the same email blast. If the email address is wrong or the message bounces, the sale is lost.",
+  users:"E-commerce conversion managers, CRM managers, MarTech automation engineers.",
+  outcome:"More recovered orders at a lower cost per recovery, with fewer messages per customer.",
+  chips:["Message Center","nms:rtEvent","Push · Email · SMS","Real time"],
+  scenario:[["0 min","Shopper leaves a €180 jacket at the shipping step."],["+15 min","Active app token found. Push offers free express checkout."],["+3 h","Push unopened, no order. Email shows the exact items, size and reviews."],["+24 h","Tier-1 member, email unread. SMS sends a one-tap checkout link."]],
+  arch:{in:["Commerce webhook · cart_abandoned","Commerce webhook · order_completed","Mobile SDK · push tokens"],
+        core:["Message Center event (nms:rtEvent)","Cart token linked to nms:recipient","Channel routing workflow","Suppression on order_completed"],
+        out:["Push · APNs / FCM","Email · transactional MTA","SMS · Infobip / Sinch"],
+        ai:"Propensity and send-time models set the wait (15–90 min) and pick the next channel per profile"},
+  wf:{nodes:[[0,1,"start","External signal · cart_abandoned"],[1,1,"query","Enrichment · cart items + profile"],[2,1,"flow","Test · app token?"],[3,0,"send","Push · express checkout"],[4,0,"flow","Wait · 3 hours"],[5,1,"flow","Test · order placed?"],[6,0,"end","End · converted"],[6,1,"send","Email · cart recap"],[7,1,"flow","Wait · 24 hours"],[8,1,"flow","Test · Tier-1 and unread?"],[9,0,"send","SMS · checkout link"],[9,2,"end","End · journey closed"]],
+      edges:[[0,1],[1,2],[2,3,"yes"],[2,7,"no token"],[3,4],[4,5],[5,6,"yes"],[5,7,"no"],[7,8],[8,9],[9,10,"yes"],[9,11,"no"]],
+      note:"An order_completed event stops every branch at once."},
+  steps:[["Capture events","Send cart_abandoned and order_completed webhooks from the commerce platform to the Message Center execution instance as nms:rtEvent."],["Link cart to profile","Extend the event and recipient schemas so an anonymous cart token resolves to a known <code>nms:recipient</code>."],["Suppress on purchase","Add a typology rule and a pre-send test that end the journey as soon as an order event arrives."],["Route by channel","Build the routing workflow: app push, then email, then SMS, each gated by consent and reachability."],["Design templates","Build responsive templates with personalisation for product images, prices and localised legal copy."]],
+  snip:{lang:"XML · Message Center PushEvent",id:"snip-1"},
+  env:[["Platform","Adobe Campaign v8 Message Center, or Adobe Journey Optimizer"],["Infrastructure","Execution instances with a dedicated transactional MTA and low-latency inbound endpoints"],["Integrations","Adobe Commerce, Shopify Plus or SFCC; APNs / FCM; Infobip or Sinch"]],
+  ai:{app:"Propensity-to-buy and send-time models choose the delay and the channel most likely to convert for each shopper.",impact:"Lower delivery cost by steering away from SMS where push or email will convert, with higher checkout completion.",kpis:[["Cart recovery rate",TBD],["Incremental revenue lift",TBD],["Channel cost reduction",TBD]]},
+  risks:[["Late order events","Re-check order status right before each send, not only at entry."],["Consent per channel","SMS and push opt-in differ by market; gate each branch separately."],["SMS spend","Cap SMS to Tier-1 and set a daily budget alert."]],
+  effort:"Medium"
+},
+{ id:2, short:"Master-child campaign framework", title:"Multi-market centralised campaign framework", group:"Governance & scale",
+  purpose:"Run one global launch across dozens of markets from a single locked master, while each market localises copy and legal text in fixed slots.",
+  problem:"Each market builds its own version. Branding drifts, legal footers are missed, and every launch is rebuilt 28 times.",
+  users:"Global brand operations, regional campaign specialists, governance leads.",
+  outcome:"Faster launches, consistent branding and a legal check that runs before anyone can approve a send.",
+  chips:["Folders & operator groups","Content blocks","Pre-flight JS","Approval gates"],
+  scenario:[["Day 0","Global team publishes one master template with locked header, footer and layout."],["Day 1","Germany, Japan and the UK load the master and fill only the copy and legal slots."],["Day 2","Pre-flight check blocks the DE version: imprint link missing. Fixed in minutes."],["Day 3","Regional legal approves. All 28 markets send on schedule."]],
+  arch:{in:["Global master template","AEM Assets · approved images","Smartling / Transifex · translations"],
+        core:["Market folders + operator groups","Locked and open content blocks","Pre-flight validation script","Multi-tier approval"],
+        out:["Market deliveries (28)","Jira · launch tracking","Audit trail per market"],
+        ai:"Generative localisation drafts market copy and checks each disclosure against local rules"},
+  wf:{nodes:[[0,1,"start","Start · master released"],[1,1,"code","Script · clone master per market"],[2,1,"data","Load · localised copy by ISO code"],[3,1,"code","Pre-flight · legal tags"],[4,0,"alert","Alert · missing disclosure"],[4,1,"flow","Approval · regional legal"],[5,1,"query","Query · market audience"],[6,1,"send","Email · market delivery"]],
+      edges:[[0,1],[1,2],[2,3],[3,4,"fail"],[3,5,"pass"],[5,6,"approved"],[6,7]],
+      note:"Markets can edit only the open blocks; structure and branding stay locked."},
+  steps:[["Partition access","Create a folder and operator group per market so each team sees its own deliveries and shares one asset library."],["Build modular templates","Lock header, footer and logos as content blocks; leave copy and legal slots open."],["Automate pre-flight","Run a validation script that checks each market's required legal tags before approval."],["Map languages","Match recipient country and language ISO codes to the right localised fragments."],["Set approval gates","Require regional legal sign-off, with a named backup approver, before any send."]],
+  snip:{lang:"JavaScript · pre-flight activity",id:"snip-2"},
+  env:[["Platform","Adobe Campaign v8, folder and operator-group model"],["Infrastructure","Cloud deployment with role-based access per market"],["Integrations","AEM Assets; Smartling or Transifex; Jira"]],
+  ai:{app:"Localisation agents translate and adapt copy, then confirm each regional disclosure matches local rules.",impact:"Shorter production cycles and no non-compliant sends across distributed teams.",kpis:[["Asset production time",TBD],["Localisation error rate",TBD],["Compliance audit pass rate","100%"]]},
+  risks:[["Template drift","Markets copying the master to edit locked blocks. Remove that right from operator groups."],["Approval bottleneck","One legal approver per market stalls launches. Name a backup."],["Translation SLA","Late copy delays all markets. Set a cut-off per launch."]],
+  effort:"Medium"
+},
+{ id:3, short:"Instance health monitor", title:"Automated instance health and operational monitoring", group:"Reliability",
+  purpose:"Catch failed workflows, delivery backlogs and database growth within minutes, alert the right team, and restart safe jobs automatically.",
+  problem:"Workflows fail silently, queues back up and logs grow unchecked. Teams find out when a deadline is already missed.",
+  users:"Campaign administrators, DBAs, campaign operations leads.",
+  outcome:"Incidents found in minutes instead of hours, and fewer missed sends on revenue-critical days.",
+  chips:["xtk:workflow","nms:delivery","Webhooks","Self-healing"],
+  scenario:[["09:02","An enrichment workflow hits a foreign key error and stops."],["09:05","The 5-minute monitor finds it in failed state."],["09:06","It restarts the job from the approved list and logs the error."],["09:06","A Slack card links straight to the workflow for the on-call engineer."]],
+  arch:{in:["xtk:workflow · state and errors","nms:delivery · backlog and status","Database · table-space usage"],
+        core:["Monitor workflow · every 5 min","Threshold rules","Restart list for safe jobs","Incident log"],
+        out:["Slack / Teams card","PagerDuty for P1","Datadog / New Relic"],
+        ai:"Anomaly detection compares delivery throughput to seasonal baselines to flag slowdowns before failures"},
+  wf:{nodes:[[0,1,"start","Scheduler · every 5 min"],[1,1,"flow","Fork · run checks"],[2,0,"query","Query · failed or > 180 min"],[2,2,"query","Query · MTA backlog > 50k"],[3,1,"flow","AND-join · collect"],[4,1,"flow","Test · threshold breached?"],[5,0,"code","Script · restart safe job"],[6,0,"alert","Webhook · Slack / Teams card"],[5,2,"end","End · healthy"]],
+      edges:[[0,1],[1,2],[1,3],[2,4],[3,4],[4,5],[5,6,"yes"],[6,7],[5,8,"no"]],
+      note:"A heartbeat alert fires if the monitor itself stops running."},
+  steps:[["Schedule the monitor","Deploy a technical workflow that runs every 5 minutes across admin folders."],["Query system tables","Read <code>xtk:workflow</code> for failed or stuck jobs, <code>nms:delivery</code> for backlog, and table-space metrics."],["Set thresholds","For example: workflow running over 180 minutes with no progress, or more than 50,000 messages pending."],["Wire alerts","Post formatted cards to Slack or Teams, and page on-call for P1."],["Add self-healing","Restart only jobs on an approved list, and move non-critical batches off the priority queue."]],
+  snip:{lang:"JavaScript · monitor activity",id:"snip-3"},
+  env:[["Platform","Adobe Campaign v8 back end"],["Infrastructure","Application and database servers (PostgreSQL, Oracle or Snowflake FDA)"],["Integrations","Slack or Teams webhooks; PagerDuty; Datadog or New Relic"]],
+  ai:{app:"Anomaly models compare delivery patterns with seasonal baselines and flag throttling or slowdowns early.",impact:"Near-zero unplanned downtime for key campaigns and faster resolution.",kpis:[["MTTR reduction",TBD],["Time to escalation",TBD],["Uptime","99.98%"]]},
+  risks:[["Unsafe restarts","Restarting a send workflow can duplicate messages. Restart only listed jobs."],["Alert fatigue","Group repeats into one incident per workflow."],["Silent monitor","If the monitor fails nothing alerts. Add a heartbeat."]],
+  effort:"Low"
+},
+{ id:4, short:"Live product recommendations", title:"Dynamic product recommendations via external API", group:"Revenue",
+  purpose:"Fill each email with products picked for that person and confirmed in stock at send time, so no one clicks through to a sold-out item.",
+  problem:"Catalogue and campaign data are synced in batches, so emails promote items that are out of stock or priced wrongly.",
+  users:"Performance marketing, CRM lifecycle and personalisation teams.",
+  outcome:"Higher revenue per email and fewer drop-offs after the click.",
+  chips:["HttpClientRequest","Enrichment","Temp schema","Fallback layout"],
+  scenario:[["Mon 06:00","Weekly cross-sell newsletter starts targeting."],["06:10","Campaign asks the recommendation engine for each person's top four picks."],["06:20","One pick is below safety stock. The next best in-stock item replaces it."],["07:00","Every email ships with four live, in-stock products."]],
+  arch:{in:["Recommendation engine API","Inventory cache (Redis)","Purchase and engagement history"],
+        core:["Query · engagement tiers","Script · batched API calls","Temp schema · 4 recommendation slots","Stock check and swap","Template loop with fallback"],
+        out:["Weekly newsletter","Click data back to the engine"],
+        ai:"Reinforcement learning re-ranks picks from browsing, returns and predicted margin"},
+  wf:{nodes:[[0,1,"start","Scheduler · weekly"],[1,1,"query","Query · engaged tiers"],[2,1,"code","Script · call rec API (batch)"],[3,1,"data","Enrichment · map JSON to slots"],[4,1,"code","Script · stock check & swap"],[5,1,"flow","Test · 4 items in stock?"],[6,0,"send","Email · 2×2 grid"],[6,2,"send","Email · bestseller fallback"]],
+      edges:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6,"yes"],[5,7,"no"]],
+      note:"API timeouts fall back to the bestseller layout instead of failing the send."},
+  steps:[["Connect the data","Use FDA or a secure API connector for the recommendation engine and the inventory cache."],["Segment the audience","Select profiles by engagement tier and purchase history."],["Call the engine","Add a script activity that fetches picks per recipient, in batches."],["Shape the data","Map the returned JSON into a temporary schema with four recommendation slots."],["Build the template","Loop through the slots in the email, with a fallback layout when fewer than four are valid."]],
+  snip:{lang:"Personalisation · email template",id:"snip-4"},
+  env:[["Platform","Adobe Campaign v8 enterprise instance"],["Infrastructure","Redis cache next to catalogue services to avoid query bottlenecks"],["Integrations","Adobe Sensei, Dynamic Yield or custom models; SAP or NetSuite inventory"]],
+  ai:{app:"Reinforcement learning keeps re-ranking picks from browsing, return history and predicted margin.",impact:"Higher revenue per email and no clicks on out-of-stock products.",kpis:[["CTOR lift",TBD],["Conversion rate lift",TBD],["Out-of-stock exposure","0%"]]},
+  risks:[["API latency at scale","Batch calls, cache results and set timeouts with fallback."],["Price changes after send","Show prices that are refreshed on open, or avoid exact prices."],["Personal data to vendor","Send hashed IDs, not emails."]],
+  effort:"High"
+},
+{ id:5, short:"Fatigue & typology engine", title:"Automated fatigue management and global typology rules", group:"Governance & scale",
+  purpose:"Cap how often each customer hears from you across every team, let the most valuable message win, and never block service messages.",
+  problem:"Separate teams target the same people on the same day. Open rates fall, opt-outs rise and sender reputation suffers.",
+  users:"CRM operations directors, deliverability managers, marketing ops.",
+  outcome:"Fewer unsubscribes, steadier engagement and a clear record of why each message was held.",
+  chips:["Typology rules","Pressure rules","nms:excludeLog","Priority weights"],
+  scenario:[["Mon 08:00","Cards plans a rate-cut offer; Mortgages plans an equity-loan newsletter for the same customer."],["08:05","Pressure rule: 2 commercial emails per rolling 7 days. One slot left."],["08:05","The card offer has the higher weight and sends. The newsletter is held for 4 days."],["08:30","A security notice is transactional and bypasses the cap."]],
+  arch:{in:["Deliveries from all divisions","nms:broadLogRcp · send history","Engagement scores"],
+        core:["Typology per message class","Pressure rule · rolling 168 h","Priority weight per delivery","Exclusion log with reason codes"],
+        out:["Arbitrated sends","Deferred messages","Capacity reporting"],
+        ai:"Churn models set a personal fatigue limit per customer instead of one fixed cap"},
+  wf:{nodes:[[0,1,"start","Delivery · targeting done"],[1,1,"query","Typology · class lookup"],[2,1,"flow","Test · transactional?"],[3,0,"send","Send · rules bypassed"],[3,2,"code","Pressure · count last 168 h"],[4,2,"flow","Arbitrate · by weight"],[5,1,"send","Send · winning message"],[5,3,"data","excludeLog · deferred"]],
+      edges:[[0,1],[1,2],[2,3,"yes"],[2,4,"no"],[4,5],[5,6,"won"],[5,7,"held"]],
+      note:"Runs during delivery analysis, so every production send passes through it."},
+  steps:[["Classify messages","Assign every delivery a typology: Transactional (exempt), Commercial priority, Commercial standard, Educational."],["Set limits","Define rolling caps per profile, for example 3 commercial touches per 168 hours."],["Attach rules","Link the global pressure typology to every production delivery template."],["Weight priorities","Score deliveries so high-margin or time-bound messages win arbitration."],["Log exclusions","Write every exclusion to <code>nms:excludeLog</code> with a reason code for capacity planning."]],
+  snip:{lang:"Configuration · typology & pressure rule",id:"snip-5"},
+  env:[["Platform","Adobe Campaign v8 typology and pressure rules"],["Infrastructure","Database tuned for indexed queries on delivery logs (nms:broadLogRcp)"],["Integrations","Deliverability monitoring (Validity / Everest); MDM"]],
+  ai:{app:"Disengagement models learn each customer's tolerance and replace one fixed cap with personal limits.",impact:"Lower unsubscribe rates, stable open rates and better lifetime value.",kpis:[["Unsubscribe rate drop",TBD],["Spam complaint rate","< 0.02%"],["Engaged customer retention",TBD]]},
+  risks:[["Caps too tight","Campaigns lose reach. Simulate on the last 90 days of sends first."],["Teams bypass typology","Make the typology mandatory in templates."],["Slow analysis","Pressure queries on large logs; index and limit the period."]],
+  effort:"Medium"
+},
+{ id:6, short:"Preference center", title:"Zero-party data progressive profiling and preference center", group:"Data & privacy",
+  purpose:"Turn 'unsubscribe' into 'send me less, about this', and capture what customers tell you directly, with a full consent history.",
+  problem:"Subscriptions are all or nothing, so uninterested customers opt out completely and mass sends stay broad.",
+  users:"Acquisition leads, privacy and compliance officers, CX designers.",
+  outcome:"Customers you keep at a lower frequency, and richer first-party data for segmentation.",
+  chips:["nms:service","cus:preferenceAudit","REST gateway","Consent log"],
+  scenario:[["Click","Subscriber taps 'Update preferences' instead of unsubscribe."],["Choose","Keeps menswear, monthly. Drops accessories and the weekly newsletter."],["Save","The profile updates in Campaign within seconds."],["Next send","Pending weekly sends skip this person; the monthly workflow picks them up."]],
+  arch:{in:["Preference portal (web / app)","Okta / Auth0 identity","OneTrust consent records"],
+        core:["API gateway to Campaign APIs","nms:service per category × cadence","cus:preferenceAudit history","Targeting reads preference flags"],
+        out:["Monthly cadence workflow","Weekly sends suppressed","Consent receipts"],
+        ai:"A conversational assistant suggests a lower frequency when someone moves to opt out"},
+  wf:{nodes:[[0,1,"start","Signal · preference saved"],[1,1,"code","Script · verify signed link"],[2,1,"data","Update · nms:subscription"],[3,1,"data","Insert · cus:preferenceAudit"],[4,1,"flow","Test · cadence changed?"],[5,0,"query","Route · monthly workflow"],[5,2,"end","End · saved"]],
+      edges:[[0,1],[1,2],[2,3],[3,4],[4,5,"yes"],[4,6,"no"]],
+      note:"Every production query checks preference flags alongside its own criteria."},
+  steps:[["Model the data","Extend <code>nms:recipient</code> and add <code>cus:preferenceAudit</code> to log every change with a timestamp."],["Expose an API","Put authenticated REST endpoints in front of Campaign's SOAP / REST interfaces."],["Build the portal","Embed an accessible preference page in the customer portal."],["Map subscriptions","Create one <code>nms:service</code> per product category and frequency."],["Align targeting","Make every production query respect explicit preference flags."]],
+  snip:{lang:"XML · schema extension",id:"snip-6"},
+  env:[["Platform","Adobe Campaign v8 integration layer, or Adobe Journey Optimizer"],["Infrastructure","AWS API Gateway or Apigee in front of containerised services"],["Integrations","AEM or Webflow; Okta or Auth0; OneTrust"]],
+  ai:{app:"An assistant in the portal suggests a schedule based on past clicks, turning opt-outs into lower-frequency subscriptions.",impact:"More reachable customers and better first-party data for targeting.",kpis:[["Opt-outs saved",TBD],["Profile completeness",TBD],["Re-engagement CTR lift",TBD]]},
+  risks:[["Tampered links","Sign every preference link and expire it."],["Two consent masters","Agree whether OneTrust or Campaign is the system of record."],["Proof of consent","Keep the audit log for the legally required period."]],
+  effort:"Medium"
+},
+{ id:7, short:"Lead scoring engine", title:"End-to-end lead scoring and nurture lifecycle", group:"Pipeline & insight",
+  purpose:"Score buying signals every day, stop nurturing the moment a lead is ready, and hand it to the right salesperson with full history.",
+  problem:"Sales calls cold contacts too early, while hot prospects wait days. Marketing and CRM history do not match.",
+  users:"B2B demand generation, sales operations, revenue operations.",
+  outcome:"More sales-accepted leads, faster follow-up and one shared lead history.",
+  chips:["@leadScore","nms:trackingLogRcp","Daily scoring","Salesforce sync"],
+  scenario:[["Day 1","Prospect downloads a whitepaper and joins a 4-email nurture."],["Days 2–12","Opens add 5 points, docs clicks 15, a pricing-page visit 50."],["Day 13","Score passes 100. Lead becomes an MQL."],["Day 13","Nurture stops; Salesforce gets the score and a call task for the account executive."]],
+  arch:{in:["Gated content forms","Web tracking · pricing page","Email tracking logs"],
+        core:["@leadScore · @mqlDate · @lifecycleStage","Daily scoring with decay","MQL threshold · 100","Nurture exit on MQL"],
+        out:["Salesforce lead and task","Account executive assignment","Pipeline reporting"],
+        ai:"A model trained on closed deals weights signals such as several people from one account browsing"},
+  wf:{nodes:[[0,1,"start","Scheduler · daily 02:00"],[1,1,"query","Incremental query · new activity"],[2,1,"code","Script · add points & decay"],[3,1,"data","Update · @leadScore"],[4,1,"flow","Test · score ≥ 100?"],[5,0,"data","Update · stage = MQL"],[6,0,"code","API · Salesforce task"],[5,2,"send","Email · next nurture step"]],
+      edges:[[0,1],[1,2],[2,3],[3,4],[4,5,"yes"],[5,6],[4,7,"no"]],
+      note:"Points decay for each idle week so old interest does not trigger sales calls."},
+  steps:[["Add score fields","Add <code>@leadScore</code>, <code>@mqlDate</code> and <code>@lifecycleStage</code> to the profile schema."],["Collect behaviour","Combine email clicks and page visits from web tracking and <code>nms:trackingLogRcp</code>."],["Score daily","Run a daily workflow that adds points for activity and removes points for inactivity."],["Advance stages","Trigger stage changes when a score crosses each threshold."],["Sync the CRM","Send status changes and owner assignments to Salesforce in both directions."]],
+  snip:{lang:"JavaScript · scoring rules",id:"snip-7"},
+  env:[["Platform","Adobe Campaign v8 enterprise"],["Infrastructure","Application nodes sized for heavy reads on tracking logs"],["Integrations","Salesforce Sales Cloud or Dynamics 365; Adobe Analytics or GA4"]],
+  ai:{app:"A model trained on past deals replaces fixed points with a readiness score and finds hidden signals.",impact:"Higher sales acceptance and shorter time to opportunity.",kpis:[["Lead-to-opportunity rate",TBD],["Sales velocity gain",TBD],["Pipeline contribution",TBD]]},
+  risks:[["Inflated opens","Apple Mail Privacy Protection fakes opens. Weight clicks and visits higher."],["Duplicate leads","Agree match keys between Campaign and the CRM."],["Slow sales follow-up","Agree a follow-up time for MQLs with sales."]],
+  effort:"Medium"
+},
+{ id:8, short:"Voucher pool orchestration", title:"Real-time voucher and promo code pool orchestration", group:"Revenue",
+  purpose:"Give every customer a unique single-use code, reserve codes safely at volume, and refill the pool before it runs out.",
+  problem:"Shared codes leak to discount sites, parallel sends grab the same code, and empty pools break deliveries mid-send.",
+  users:"Merchandising directors, promotions operations, campaign engineers.",
+  outcome:"Protected margin, no leaked codes and no failed sends on peak days.",
+  chips:["cus:couponPool","Row locking","Depletion guard","POS reconciliation"],
+  scenario:[["Thu 18:00","Black Friday send: unique €25 codes for 500,000 customers."],["18:05","Pool check: enough codes for the audience. Send continues."],["18:10","Codes are reserved and tied to each recipient as messages build."],["Fri 02:00","Pool below 15%: merchandising is alerted and a new batch is requested."]],
+  arch:{in:["Voucher batch file or API (Voucherify, Talon.One)","POS redemptions · daily file"],
+        core:["cus:couponPool · Available / Reserved / Consumed","Indexes on status and promo","Atomic reservation at send","Depletion guard · 15%","Redemption reconciliation"],
+        out:["Email with unique code","Merchandising alert","Campaign ROAS report"],
+        ai:"Price-sensitivity models give each customer the smallest discount likely to convert"},
+  wf:{nodes:[[0,1,"start","Start · promo campaign"],[1,1,"query","Query · audience"],[2,1,"code","Script · count available codes"],[3,1,"flow","Test · pool ≥ audience?"],[4,2,"alert","Alert · request new batch"],[4,1,"code","Script · reserve codes (locked)"],[5,1,"send","Email · unique code"],[6,1,"data","Daily · mark consumed from POS"]],
+      edges:[[0,1],[1,2],[2,3],[3,4,"no"],[3,5,"yes"],[5,6],[6,7]],
+      note:"Adobe Campaign's built-in coupon module covers simpler cases; the custom pool adds locking and refill."},
+  steps:[["Create the pool","Add <code>cus:couponPool</code> with promo ID, code, status, expiry and recipient link."],["Index it","Index status and key fields so reservations stay fast under load."],["Reserve safely","Reserve codes during delivery preparation with row locking to avoid two people getting one code."],["Guard depletion","Stop or alert in delivery analysis if available codes are fewer than the audience."],["Reconcile redemptions","Load daily POS redemptions, mark codes consumed and report true ROAS."]],
+  snip:{lang:"SQL · atomic reservation",id:"snip-8"},
+  env:[["Platform","Adobe Campaign v8 database layer"],["Infrastructure","Transactional database with ACID guarantees (PostgreSQL or Oracle)"],["Integrations","Shopify, Magento or custom POS; Talon.One or Voucherify"]],
+  ai:{app:"Price-sensitivity models assign 10%, 20% or a fixed credit per customer, using the lowest that converts.",impact:"Protected margin and no losses to coupon scrapers or checkout errors.",kpis:[["Margin preserved",TBD],["Verified redemption rate",TBD],["Distribution errors","0.00%"]]},
+  risks:[["Orphaned reservations","Release codes from deliveries that never sent."],["Codes in proofs","Mask codes in test and proof sends."],["Expiry mismatch","Align code expiry with the offer end date."]],
+  effort:"Medium"
+},
+{ id:9, short:"Privacy purge pipeline", title:"Unified GDPR / CCPA automated purge pipeline", group:"Data & privacy",
+  purpose:"Handle access and deletion requests end to end: verify, find every copy of the person's data, delete or anonymise it, and prove it was done.",
+  problem:"Manual deletions miss tracking logs and custom tables, miss deadlines and leave the company exposed to fines.",
+  users:"Data protection officers, legal counsel, marketing architects.",
+  outcome:"Requests closed well inside the legal deadline, with a receipt for every one.",
+  chips:["Privacy requests","Schema dependency map","Cascade purge","Hashed receipt"],
+  scenario:[["Day 0","A customer files a GDPR Article 17 request on the privacy portal."],["Day 0","The verified request reaches Campaign through a secure API."],["Day 1","The pipeline removes logs, custom tables and the profile in the right order."],["Day 1","A hashed receipt goes back to the portal. Deadline: 30 days."]],
+  arch:{in:["Privacy portal (OneTrust / TrustArc)","Verified access or delete request","Retention rules register"],
+        core:["Campaign privacy requests","Map of nms:* and cus:* tables","Cascade purge or anonymise","Retention exceptions","Hashed audit receipt"],
+        out:["Completion token to portal","Audit repository","DPO reporting"],
+        ai:"Discovery agents scan new custom tables and payloads for personal data the map does not cover"},
+  wf:{nodes:[[0,1,"start","Signal · request received"],[1,1,"code","Script · verify request"],[2,1,"flow","Test · access or delete?"],[3,0,"data","Extract · personal data file"],[3,2,"code","Purge · logs & cus:* tables"],[4,2,"data","Delete · nms:recipient"],[5,1,"code","Script · hashed receipt"],[6,1,"data","Callback · token to portal"]],
+      edges:[[0,1],[1,2],[2,3,"access"],[2,4,"delete"],[3,6],[4,5],[5,6],[6,7]],
+      note:"Runs off-peak to avoid locking tables used by live sends."},
+  steps:[["Map the data","Document every table that holds personal data: <code>nms:recipient</code>, <code>nms:subscription</code> and all <code>cus:*</code> extensions."],["Receive requests","Build secure endpoints for verified access and deletion requests from the privacy platform."],["Purge in order","Delete or anonymise identifiers in linked tables first, keeping anonymous statistics."],["Respect retention","Keep legally required records (for example tax) in anonymised form, and document why."],["Issue receipts","Generate a signed completion token for the privacy portal and auditors."]],
+  snip:{lang:"JavaScript · audit receipt",id:"snip-9"},
+  env:[["Platform","Adobe Campaign v8 privacy requests"],["Infrastructure","Off-peak batch queue to avoid table locks"],["Integrations","OneTrust, TrustArc or Securiti.ai; legal audit repository"]],
+  ai:{app:"Discovery agents keep scanning new tables, payloads and logs for personal data the map has missed.",impact:"Almost no manual effort per request and no data left behind.",kpis:[["Request fulfilment time",TBD],["Manual effort saved",TBD],["Compliance rate","100%"]]},
+  risks:[["Backups","Deleted data stays in backups until they expire. Document the expiry."],["Downstream copies","Warehouse and FDA mirrors must purge too."],["Re-identification","Check that anonymised history cannot be traced back."]],
+  effort:"High"
+},
+{ id:10, short:"Attribution ETL connector", title:"Multi-touch attribution and performance ETL", group:"Pipeline & insight",
+  purpose:"Move send, open, click and conversion data from Campaign to the data warehouse every night, so campaigns get fair credit next to every other channel.",
+  problem:"Campaign data stays inside Campaign, so reporting relies on last-click and email's real contribution is unknown.",
+  users:"CMOs, BI analysts, data engineers.",
+  outcome:"One view of performance across channels and budget moved to what actually works.",
+  chips:["Incremental extract","Watermark","S3 / SFTP","Snowflake · dbt"],
+  scenario:[["01:00","Nightly job reads the last extract timestamp."],["01:05","Only new send and tracking rows are extracted, compressed and encrypted."],["01:20","Files land in S3; Airflow loads them into Snowflake."],["Morning","BI joins email touches with store sales. Example finding: educational emails lift store purchases by 23%."]],
+  arch:{in:["nms:broadLogRcp · sends","nms:trackingLogRcp · opens, clicks","Delivery metadata"],
+        core:["Watermark · last extract time","Incremental query","Extract · gzip CSV or Parquet","Encrypt · PGP","File transfer · S3 / SFTP"],
+        out:["Snowflake / BigQuery","dbt and Airflow models","Tableau / Power BI attribution"],
+        ai:"Data-driven attribution models assign credit by path and guide budget allocation"},
+  wf:{nodes:[[0,1,"start","Scheduler · nightly 01:00"],[1,1,"code","Script · read watermark"],[2,1,"query","Query · logs after watermark"],[3,1,"data","Extract · gzip CSV"],[4,1,"code","Script · encrypt PGP"],[5,1,"data","File transfer · S3 / SFTP"],[6,0,"code","Script · advance watermark"],[6,2,"alert","Alert · transfer failed"]],
+      edges:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6,"ok"],[5,7,"error"]],
+      note:"The watermark only moves after a confirmed transfer, so a failed night is re-sent in full."},
+  steps:[["Extract deltas","Use a watermark timestamp so each run reads only new or changed log rows."],["Clean and format","Write partition-friendly files (Parquet or gzip CSV) with consistent columns."],["Transfer securely","Send files by SFTP, direct S3 upload or Azure Blob storage."],["Load the warehouse","Use dbt or Airflow to load files into reporting schemas."],["Model attribution","Build linear, time-decay and data-driven views for BI dashboards."]],
+  snip:{lang:"SQL · linear attribution (Snowflake)",id:"snip-10"},
+  env:[["Platform","Adobe Campaign v8 with cloud database"],["Infrastructure","S3 or Google Cloud Storage with a cloud data warehouse"],["Integrations","Snowflake, BigQuery or Databricks; Tableau, Power BI or ThoughtSpot; dbt, Airflow"]],
+  ai:{app:"Attribution models score each channel path and show which combinations drive the most profitable sales.",impact:"No more channel silos and better return on marketing spend.",kpis:[["Budget efficiency gain",TBD],["Channel synergy value",TBD],["Reporting latency cut",TBD]]},
+  risks:[["Log cleanup","Campaign purges old tracking logs. Extract before the cleanup window."],["Identity matching","Email IDs and store customer IDs need a shared key."],["Personal data in files","Hash identifiers before export."]],
+  effort:"Medium"
+}
+];
+
+/* Set-up screens: key settings as they would be entered in the Campaign client */
+var SCREENS = {
+ 1:{win:"Transactional message",name:"Cart recap · email",tabs:["General","Content","Typology","Publication"],active:1,fields:[["Event type","CART_ABANDONED"],["Target mapping","Real-time event (nms:rtEvent)"],["Channel","Email · transactional MTA"],["Template","Cart recap · responsive"],["Personalisation","<%= rtEvent.ctx.cart.item.@name %>, size, price"],["Stop condition","ORDER_COMPLETED with the same cart id"],["Publication","☑ Published to execution instances"]]},
+ 2:{win:"Delivery properties",name:"F-launch · DE market",tabs:["General","Approval","Content blocks","Audit"],active:1,fields:[["Approval mode","Mandatory before send"],["Reviewer","Regional legal · DE"],["Backup reviewer","Regional legal · AT"],["Deadline","24 h before scheduled send"],["Locked blocks","Header, footer, logo, navigation"],["Open blocks","Hero copy, offer text, legal footer"],["Pre-flight","☑ Run cus:preflightLegal before approval"]]},
+ 3:{win:"Workflow properties",name:"OPS · Instance monitor",tabs:["General","Scheduler","Execution","Supervision"],active:1,fields:[["Frequency","Every 5 minutes, 24/7"],["Folder","Administration › Technical workflows"],["Stuck threshold","Running > 180 min with no progress"],["Backlog threshold","MTA pending > 50,000 messages"],["Alert channel","Option cus_alertWebhookUrl"],["Auto-restart","☑ Only jobs in cus_restartSafeList"],["Supervisors","Campaign Ops on-call group"]]},
+ 4:{win:"JavaScript code",name:"Call recommendation API",tabs:["Script","Advanced","Transitions"],active:0,fields:[["Endpoint","Option cus_recApiUrl"],["Authentication","External account · OAuth client credentials"],["Batch size","1,000 recipients per call"],["Timeout","3 s, then bestseller fallback"],["Identifier sent","Hashed customer ID (no email)"],["Output","temp:enrich/@recs · JSON, 4 slots"],["Stock rule","☑ Swap item if stock < safety level"]]},
+ 5:{win:"Typology rule",name:"Commercial pressure · all divisions",tabs:["General","Pressure","Targeting","Typologies"],active:1,fields:[["Rule type","Pressure"],["Channel","Email"],["Period","7 days, rolling"],["Maximum","2 commercial messages per profile"],["Arbitration","Highest delivery weight wins"],["Exempt","Typology: Transactional"],["Log","☑ Write exclusions to nms:excludeLog"]]},
+ 6:{win:"Subscription service",name:"Menswear · monthly",tabs:["General","Subscriptions","Messages","Audit"],active:0,fields:[["Internal name","svc_menswear_monthly"],["Channel","Email"],["Validity","Unlimited"],["Opt-in","Double opt-in for new subscribers"],["Source","Preference portal via API gateway"],["Audit","☑ Log every change to cus:preferenceAudit"],["Unsubscribe","Offer monthly cadence before full opt-out"]]},
+ 7:{win:"Update data",name:"Write lead score",tabs:["Update","Reconciliation","Transitions"],active:0,fields:[["Operation","Update"],["Target","nms:recipient"],["Key","@id = temp:score/@recipientId"],["@leadScore","Computed score (0 floor)"],["@lifecycleStage","'MQL' when score ≥ 100"],["@mqlDate","GetDate() on first crossing"],["Schedule","Daily at 02:00"]]},
+ 8:{win:"Schema",name:"cus:couponPool",tabs:["Structure","Indexes","Rules"],active:1,fields:[["Index 1","promoId + status"],["Index 2","code (unique)"],["Statuses","0 Available · 1 Reserved · 2 Consumed"],["Reservation","At delivery preparation, row lock, skip locked"],["Depletion alert","Available < 15% of pool"],["Release","Unsent reservations freed after 48 h"],["Reconciliation","☑ Daily POS file marks codes consumed"]]},
+ 9:{win:"Privacy request",name:"GDPR Art. 17 · delete",tabs:["General","Data","History"],active:0,fields:[["Regulation","GDPR"],["Request type","Delete"],["Identifier","Email, hashed"],["Tables covered","nms:recipient, nms:broadLogRcp, nms:trackingLogRcp, cus:*"],["Retention exceptions","Invoices kept anonymised (tax)"],["Due date","30 days from verified receipt"],["Receipt","☑ Hashed receipt returned to portal"]]},
+ 10:{win:"File transfer",name:"Upload logs to S3",tabs:["General","Protocol","Transitions"],active:0,fields:[["External account","S3 · analytics landing zone"],["Action","Upload"],["File","broadlog_<date>.csv.gz.pgp"],["Encryption","PGP, analytics team public key"],["Retry","3 attempts, 10 min apart"],["On success","Advance watermark"],["On error","☑ Alert data engineering, keep watermark"]]}
+};
+/* How each KPI is measured, so targets can be set from the client's own baseline */
+var KPIDEF = {
+ 1:["Recovered orders ÷ abandoned carts entering the journey","Recovered revenue vs. a 10% holdout group","Cost per recovered order vs. email + SMS only"],
+ 2:["Days from master release to all markets live","Corrections needed ÷ localised versions","Audited deliveries passing ÷ deliveries audited"],
+ 3:["Failure-to-fix time, before vs. after","Minutes from threshold breach to page","Available minutes ÷ total minutes in send windows"],
+ 4:["Click-to-open vs. a static-content control","Orders ÷ clicks vs. control","Clicks landing on out-of-stock pages"],
+ 5:["Unsubscribes per 1,000 delivered, before vs. after","Complaints ÷ delivered","Customers still engaged at 90 days"],
+ 6:["Preference visits ending in a downgrade, not an opt-out","Profiles with 3+ stated preferences","CTR of retained profiles vs. before"],
+ 7:["MQLs that become opportunities","Days from MQL to closed-won","Opportunity value from scored leads"],
+ 8:["Average discount given vs. a blanket offer","Redemptions matched to the reserved recipient","Codes sent twice or invalid"],
+ 9:["Median hours from verified request to receipt","Analyst hours per request, before vs. after","Requests closed inside the legal deadline"],
+ 10:["Revenue per marketing euro after reallocation","Incremental value of channel combinations","Hours from send to data in BI"]
+};
+/* Test runs: simulated records and cohort results. row = [cells..., status, outcome, path of workflow node indexes] */
+var TESTS = {
+ 1:{cols:["Test ID","Customer","Cart","App token","Tier"],cohortLabel:"10,000 simulated carts + 1,000 holdout",
+   rows:[["T-1001","Anna K.","€180 jacket","Yes","2","ok","Bought after push (+42 min)",[0,1,2,3,4,5,6]],
+         ["T-1002","Marko P.","€95 sneakers","No","1","ok","Bought after SMS (+26 h)",[0,1,2,7,8,9,10]],
+         ["T-1003","Eleni D.","€240 coat","Yes","1","warn","Push, email and SMS sent, no purchase",[0,1,2,3,4,5,7,8,9,10]],
+         ["T-1004","Ivan S.","€60 shirt","No","3","warn","Email only, journey closed at +24 h",[0,1,2,7,8,9,11]],
+         ["T-1005","Sofia M.","€130 boots","Yes","2","ok","Bought after email (+5 h)",[0,1,2,3,4,5,7]],
+         ["T-1006","Luka B.","€310 suit","Yes","1","stop","Ordered at +8 min, journey stopped before push",[0,1]]],
+   cohort:[["Push sent","6,200"],["Emails sent","5,140"],["SMS sent","610"],["Recovered orders","1,180 (11.8%)"],["Holdout recovery","4.1%"],["Cost per recovery","€0.21 vs €0.48"]],
+   kpi:["11.8%","+7.7 pts vs holdout","−56%"]},
+ 2:{cols:["Market","Language","Legal tags found","Approver"],cohortLabel:"28 markets, one simulated launch",
+   rows:[["DE","de-DE","imprint, unsubscribe","Legal DE","ok","Approved, live on day 2",[0,1,2,3,5,6,7]],
+         ["AT","de-AT","unsubscribe","Legal AT","stop","Blocked: imprint missing, fixed in 20 min",[0,1,2,3,4]],
+         ["GR","el-GR","unsubscribe, privacy","Legal GR","ok","Approved, live on day 2",[0,1,2,3,5,6,7]],
+         ["HR","hr-HR","unsubscribe","Legal HR","ok","Approved, live on day 3",[0,1,2,3,5,6,7]],
+         ["RS","sr-RS","none","Legal RS","stop","Blocked: unsubscribe link missing",[0,1,2,3,4]],
+         ["CY","el-CY","unsubscribe, privacy","Legal GR (backup)","ok","Backup approver signed off, live on day 3",[0,1,2,3,5,6,7]]],
+   cohort:[["Markets launched","28 of 28"],["Blocked by pre-flight","4 (14%)"],["Average fix time","25 min"],["Median approval time","6 h"],["Time to all markets live","3 days vs 9 manual"],["Audit pass after fixes","28 / 28"]],
+   kpi:["−67% (9 → 3 days)","4 of 28 caught before send","100% (28 / 28)"]},
+ 3:{cols:["Check","Signal","Value","Threshold"],cohortLabel:"30-day simulated window",
+   rows:[["09:00","All checks","Normal","—","ok","Healthy, no action",[0,1,2,3,4,5,8]],
+         ["09:05","WKF-ENRICH-02","Failed · FK violation","Any failure","warn","Auto-restarted, Slack card in 1 min",[0,1,2,4,5,6,7]],
+         ["09:10","MTA queue","62,400 pending","50,000","stop","P1 page to on-call, clear by 09:40",[0,1,3,4,5,7]],
+         ["09:15","DB table space","81% used","80%","warn","Warning card, cleanup scheduled",[0,1,3,4,5,7]],
+         ["09:20","WKF-SEND-WEEKLY","Running 200 min","180 min","stop","Alert only: send jobs are never auto-restarted",[0,1,2,4,5,7]]],
+   cohort:[["Incidents","14"],["Median detection","4 min vs 3.2 h"],["Auto-restarted","9 of 14"],["Mean time to resolve","18 min vs 2.5 h"],["Missed sends","0"],["Uptime","99.98%"]],
+   kpi:["−88% (2.5 h → 18 min)","4 min","99.98%"]},
+ 4:{cols:["Recipient","Segment","Picks returned","Swaps"],cohortLabel:"50,000 simulated sends vs static control",
+   rows:[["R-201 Maya","Engaged","4","0","ok","2×2 grid sent",[0,1,2,3,4,5,6]],
+         ["R-202 Tom","Engaged","4","1 (blender out → kettle)","ok","2×2 grid sent after swap",[0,1,2,3,4,5,6]],
+         ["R-203 Lina","Lapsing","API timeout","—","warn","Bestseller fallback sent",[0,1,2,5,7]],
+         ["R-204 Raj","Engaged","4","2, only 3 in stock","warn","Bestseller fallback sent",[0,1,2,3,4,5,7]],
+         ["R-205 Zoe","VIP","4","0","ok","2×2 grid sent",[0,1,2,3,4,5,6]]],
+   cohort:[["Grid emails","47,900 (95.8%)"],["Fallback emails","2,100"],["Items swapped","3,850"],["CTOR","18.4% vs 12.9%"],["Conversion","4.6% vs 3.5%"],["Out-of-stock clicks","0"]],
+   kpi:["+5.5 pts (12.9 → 18.4%)","+31% (3.5 → 4.6%)","0%"]},
+ 5:{cols:["Customer","Message","Typology","Sent this week"],cohortLabel:"200,000 simulated profiles, 30 days",
+   rows:[["C-01","Card rate cut","Priority · weight 8","1 of 2","ok","Sent: highest weight wins",[0,1,2,4,5,6]],
+         ["C-01","Mortgage newsletter","Standard · weight 4","1 of 2","warn","Held 4 days, logged PRESSURE_CAP",[0,1,2,4,5,7]],
+         ["C-02","Security notice","Transactional","2 of 2","ok","Sent: transactional bypasses the cap",[0,1,2,3]],
+         ["C-03","How-to guide","Educational · weight 2","2 of 2","warn","Held, cap reached",[0,1,2,4,5,7]],
+         ["C-04","Card rate cut","Priority · weight 8","0 of 2","ok","Sent",[0,1,2,4,5,6]]],
+   cohort:[["Commercial sends requested","1.12M"],["Delivered","860k"],["Held by pressure rule","260k (23%)"],["Unsubscribes per 1,000","1.4 vs 2.1"],["Complaint rate","0.015%"],["Engaged at 90 days","66% vs 61%"]],
+   kpi:["−33% (2.1 → 1.4 per 1,000)","0.015%","+5 pts (61 → 66%)"]},
+ 6:{cols:["Profile","Request","Link","Cadence change"],cohortLabel:"8,000 simulated preference visits",
+   rows:[["P-31 Nikos","Menswear only, monthly","Valid","Weekly → monthly","ok","Kept as monthly subscriber",[0,1,2,3,4,5]],
+         ["P-32 Ana","Add outdoor category","Valid","None","ok","Preferences saved",[0,1,2,3,4,6]],
+         ["P-33 —","Change cadence","Expired","—","stop","Rejected, new link emailed",[0,1]],
+         ["P-34 Petra","Unsubscribe all","Valid","Monthly offered, declined","warn","Unsubscribed, audit logged",[0,1,2,3,4,6]],
+         ["P-35 Jon","Fewer emails","Valid","Weekly → monthly","ok","Kept as monthly subscriber",[0,1,2,3,4,5]]],
+   cohort:[["Downgraded instead of opting out","3,280 (41%)"],["Full opt-outs","2,960 (37%)"],["Other updates","1,760"],["Profiles with 3+ preferences","47% vs 22%"],["CTR of kept profiles","3.9% vs 2.6%"],["Audit rows written","8,000"]],
+   kpi:["41% kept","22 → 47%","+1.3 pts (2.6 → 3.9%)"]},
+ 7:{cols:["Lead","Activity since last run","Score","Stage"],cohortLabel:"2,400 simulated leads, 60 days",
+   rows:[["L-71 Acme","2 opens, 2 docs clicks, pricing page","110","Nurture → MQL","ok","MQL, Salesforce task created",[0,1,2,3,4,5,6]],
+         ["L-72 Beta","1 open, 1 docs click","45","Nurture","warn","Next nurture email",[0,1,2,3,4,7]],
+         ["L-73 Gamma","1 open, pricing page","98","Nurture","warn","2 points short, next nurture email",[0,1,2,3,4,7]],
+         ["L-74 Delta","Idle 3 weeks","60 → 30","Nurture","warn","Score decayed, next nurture email",[0,1,2,3,4,7]],
+         ["L-75 Epsilon","Pricing page twice, docs click","130","Nurture → MQL","ok","MQL, Salesforce task created",[0,1,2,3,4,5,6]]],
+   cohort:[["MQLs","310 (12.9%)"],["MQL → opportunity","38% vs 17% unscored"],["Days to close","49 vs 64"],["Sales follow-up","< 24 h for 92%"],["Pipeline from scored leads","€2.8M"],["Duplicate leads blocked","41"]],
+   kpi:["38% (vs 17%)","−23% (64 → 49 days)","€2.8M"]},
+ 8:{cols:["Run","Audience","Codes available","Check"],cohortLabel:"650,000 simulated codes, Black Friday",
+   rows:[["Wave 1","500,000","620,000","Pool ≥ audience","ok","Codes reserved and sent",[0,1,2,3,5,6]],
+         ["Wave 2","150,000","120,000","Pool < audience","stop","Send blocked, 100,000 top-up requested",[0,1,2,3,4]],
+         ["Wave 2 retry","150,000","220,000","Pool ≥ audience","ok","Codes reserved and sent",[0,1,2,3,5,6]],
+         ["Fri 02:00","—","63,500 left (10%)","Below 15%","warn","Merchandising alerted",[2,3,4]],
+         ["Daily reconcile","—","—","POS file","ok","61,300 codes marked consumed",[7]]],
+   cohort:[["Codes sent","650,000"],["Duplicate codes","0"],["Redemption rate","9.4%"],["Redemptions matched to recipient","99.7%"],["Average discount","€18.40 vs €25 blanket"],["Leaked codes found online","0"]],
+   kpi:["26% less discount (€25 → €18.40)","99.7%","0.00%"]},
+ 9:{cols:["Request","Regulation","Type","Verified"],cohortLabel:"420 simulated requests",
+   rows:[["DSAR-901","GDPR","Delete","Yes","ok","Purged in 3.5 h, receipt sent",[0,1,2,4,5,6,7]],
+         ["DSAR-902","CCPA","Access","Yes","ok","Data file delivered in 2 h",[0,1,2,3,6,7]],
+         ["DSAR-903","GDPR","Delete","No","stop","Rejected, identity not verified",[0,1]],
+         ["DSAR-904","GDPR","Delete","Yes","warn","Purged, 2 invoices kept anonymised for tax",[0,1,2,4,5,6,7]],
+         ["DSAR-905","GDPR","Delete","Yes","ok","No data held, receipt sent",[0,1,2,6,7]]],
+   cohort:[["Requests closed","420 of 420"],["Median time","4 h vs 11 days manual"],["Analyst time per request","10 min vs 2 h"],["Inside legal deadline","100%"],["Tables purged per delete","7"],["New PII columns flagged","3"]],
+   kpi:["4 h (was 11 days)","−92% (2 h → 10 min)","100% (420 / 420)"]},
+ 10:{cols:["Night","Rows extracted","File size","Transfer"],cohortLabel:"90-night simulated run",
+   rows:[["Night 1","2.4M","182 MB","OK","ok","Loaded to Snowflake 01:24",[0,1,2,3,4,5,6]],
+         ["Night 2","2.1M","160 MB","OK","ok","Loaded to Snowflake 01:21",[0,1,2,3,4,5,6]],
+         ["Night 3","2.2M","168 MB","S3 timeout","stop","Alert sent, watermark kept",[0,1,2,3,4,5,7]],
+         ["Night 4","4.5M","341 MB","OK","ok","Nights 3 and 4 loaded together",[0,1,2,3,4,5,6]]],
+   cohort:[["Nights completed","90 of 90"],["Data latency","7 h vs 26 h"],["Email credit, linear model","18% vs 6% last-click"],["Budget moved","10% to proven paths"],["Revenue per marketing €","+12%"],["Store lift from education emails","+23%"]],
+   kpi:["+12% revenue per €","+23% store purchases","−73% (26 → 7 h)"]}
+};
+function testHTML(id){
+  var t=TESTS[id];
+  var pill={ok:"Pass",warn:"Note",stop:"Stopped"};
+  return '<div class="testgrid"><div class="tbl-wrap"><table class="tt"><thead><tr>'+t.cols.map(function(c){return '<th>'+esc(c)+'</th>'}).join("")+'<th>Result</th><th><span class="sr">Trace</span></th></tr></thead><tbody>'+
+    t.rows.map(function(r,i){
+      var n=t.cols.length;
+      return '<tr data-i="'+i+'">'+r.slice(0,n).map(function(c,j){return '<td'+(j===0?' class="mono"':'')+'>'+esc(c)+'</td>'}).join("")+
+        '<td><span class="pill '+r[n]+'">'+pill[r[n]]+'</span> '+esc(r[n+1])+'</td><td><button class="trace" data-i="'+i+'">▶ Trace</button></td></tr>';
+    }).join("")+'</tbody></table></div>'+
+    '<div class="card cohort"><div class="eyebrow">Simulated test group</div><p class="cl">'+esc(t.cohortLabel)+'</p><dl>'+
+    t.cohort.map(function(c){return '<div><dt>'+esc(c[0])+'</dt><dd>'+esc(c[1])+'</dd></div>'}).join("")+'</dl></div></div>';
+}
+var playTimer=null;
+function traceRow(id,i){
+  var r=TESTS[id].rows[i], path=r[r.length-1], svg=document.querySelector("#wfcanvas svg");
+  clearTimeout(playTimer);
+  document.querySelectorAll(".tt tr").forEach(function(tr){tr.classList.toggle("sel",+tr.dataset.i===i)});
+  svg.classList.add("tracing");
+  svg.querySelectorAll(".hit").forEach(function(e){e.classList.remove("hit")});
+  var st=document.getElementById("tracestate");
+  st.textContent="Tracing "+r[0]+" · "+r[r.length-2];
+  var fig=document.getElementById("wfcanvas");
+  var rect=fig.getBoundingClientRect(); if(rect.top<0||rect.bottom>innerHeight) fig.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  var k=0, reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (function step(){
+    var n=svg.querySelector('[data-n="'+path[k]+'"]'); if(n){n.classList.add("hit"); var sc=document.querySelector("#wfcanvas .fig-scroll"); var nb=n.getBoundingClientRect(),sb=sc.getBoundingClientRect(); if(nb.right>sb.right||nb.left<sb.left) sc.scrollLeft+=nb.left-sb.left-40;}
+    if(k>0){var e=svg.querySelector('[data-e="'+path[k-1]+'-'+path[k]+'"]'); if(e)e.classList.add("hit")}
+    k++; if(k<path.length) playTimer=setTimeout(step,reduce?0:450);
+  })();
+}
+
+function screenHTML(id){
+  var s=SCREENS[id];
+  return '<div class="win" role="img" aria-label="'+esc(s.win+': '+s.name)+'">'+
+    '<div class="win-bar"><span class="win-ico"></span><span>'+esc(s.win)+'</span><b>'+esc(s.name)+'</b></div>'+
+    '<div class="win-tabs">'+s.tabs.map(function(t,i){return '<span'+(i===s.active?' class="on"':'')+'>'+esc(t)+'</span>'}).join("")+'</div>'+
+    '<div class="win-body">'+s.fields.map(function(f){
+      var chk=f[1].indexOf("☑ ")===0, v=chk?f[1].slice(2):f[1];
+      return '<div class="fld"><label>'+esc(f[0])+'</label><div class="val'+(chk?' chk':'')+'">'+(chk?'<i aria-hidden="true">✓</i>':'')+esc(v)+'</div></div>';
+    }).join("")+'</div>'+
+    '<div class="win-foot"><span>Example values</span><span class="btn">OK</span><span class="btn ghost">Cancel</span></div></div>';
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function cv(name){return "var("+name+")"}
+
+/* ---------- index ---------- */
+var groupsEl=document.getElementById("groups");
+groupsEl.innerHTML=GROUPS.map(function(g){
+  return '<div class="group"><h2>'+esc(g.name)+'</h2><div class="tiles">'+g.ids.map(function(id){
+    var u=UC[id-1];
+    return '<button class="tile" role="tab" id="tab-'+id+'" aria-controls="sheet" data-id="'+id+'"><span class="n">'+String(id).padStart(2,"0")+'</span><span class="t">'+esc(u.short)+'</span></button>';
+  }).join("")+'</div></div>';
+}).join("");
+groupsEl.addEventListener("click",function(e){var b=e.target.closest(".tile");if(b){go(+b.dataset.id,true)}});
+
+/* ---------- architecture diagram ---------- */
+function wrapText(t,max){
+  var words=t.split(" "),lines=[],cur="";
+  words.forEach(function(w){ if((cur+" "+w).trim().length>max){ if(cur)lines.push(cur); cur=w } else cur=(cur+" "+w).trim() });
+  if(cur)lines.push(cur); return lines;
+}
+function archSVG(a){
+  var colW=280,gap=70,x0=24,boxH=46,boxGap=10,top=58,W=x0*2+colW*3+gap*2;
+  var cols=[{t:"Data & events in",items:a.in},{t:"Adobe Campaign v8 core",items:a.core,core:true},{t:"Channels & systems out",items:a.out}];
+  var maxN=Math.max(a.in.length,a.core.length,a.out.length);
+  var colH=maxN*(boxH+boxGap)-boxGap;
+  var aiY=top+colH+40, H=aiY+70;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="Solution architecture" font-family="IBM Plex Sans, system-ui, sans-serif">';
+  s+='<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+cv("--muted")+'"/></marker>'+
+     '<marker id="ahai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+cv("--ai")+'"/></marker></defs>';
+  cols.forEach(function(c,i){
+    var x=x0+i*(colW+gap);
+    if(c.core) s+='<rect x="'+(x-10)+'" y="'+(top-38)+'" width="'+(colW+20)+'" height="'+(colH+52)+'" rx="10" fill="'+cv("--soft")+'" stroke="'+cv("--accent")+'" stroke-width="1.5"/>';
+    s+='<text x="'+(c.core?x:x)+'" y="'+(top-16)+'" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.3" fill="'+(c.core?cv("--accent"):cv("--muted"))+'">'+esc(c.t.toUpperCase())+'</text>';
+    var startY=top+(colH-(c.items.length*(boxH+boxGap)-boxGap))/2;
+    c.items.forEach(function(it,j){
+      var y=startY+j*(boxH+boxGap);
+      s+='<rect x="'+x+'" y="'+y+'" width="'+colW+'" height="'+boxH+'" rx="6" fill="'+cv("--panel")+'" stroke="'+cv("--line")+'"/>';
+      var lines=wrapText(it,36);
+      lines.slice(0,2).forEach(function(l,k){
+        var ly=y+boxH/2+(lines.length>1?(k?9:-5):5);
+        s+='<text x="'+(x+14)+'" y="'+ly+'" font-size="13" fill="'+cv("--ink")+'">'+esc(l)+'</text>';
+      });
+    });
+  });
+  var midY=top+colH/2;
+  for(var i=0;i<2;i++){
+    var x1=x0+i*(colW+gap)+colW+(i===0?6:16), x2=x0+(i+1)*(colW+gap)-(i===0?16:6);
+    s+='<line x1="'+x1+'" y1="'+midY+'" x2="'+x2+'" y2="'+midY+'" stroke="'+cv("--muted")+'" stroke-width="2" marker-end="url(#ah)"/>';
+  }
+  var ax=x0, aw=W-2*x0;
+  s+='<rect x="'+ax+'" y="'+aiY+'" width="'+aw+'" height="44" rx="8" fill="'+cv("--ai-soft")+'" stroke="'+cv("--ai")+'" stroke-dasharray="5 4"/>';
+  s+='<text x="'+(ax+16)+'" y="'+(aiY+27)+'" font-size="13" fill="'+cv("--ink")+'"><tspan font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.3" fill="'+cv("--ai")+'">AI LAYER  </tspan>'+esc(a.ai)+'</text>';
+  var coreCx=x0+colW+gap+colW/2;
+  s+='<line x1="'+coreCx+'" y1="'+aiY+'" x2="'+coreCx+'" y2="'+(top+colH+16)+'" stroke="'+cv("--ai")+'" stroke-width="1.5" marker-end="url(#ahai)"/>';
+  return s+'</svg>';
+}
+
+/* ---------- workflow canvas ---------- */
+function glyph(kind,cx,cy,col){
+  var g='';
+  switch(kind){
+    case "start": g='<circle cx="'+cx+'" cy="'+cy+'" r="9" fill="none" stroke="'+col+'" stroke-width="2"/><path d="M'+(cx-3)+' '+(cy-5)+'L'+(cx+5)+' '+cy+'L'+(cx-3)+' '+(cy+5)+'z" fill="'+col+'"/>';break;
+    case "query": g='<circle cx="'+(cx-2)+'" cy="'+(cy-2)+'" r="6" fill="none" stroke="'+col+'" stroke-width="2"/><line x1="'+(cx+2)+'" y1="'+(cy+2)+'" x2="'+(cx+8)+'" y2="'+(cy+8)+'" stroke="'+col+'" stroke-width="2.4" stroke-linecap="round"/>';break;
+    case "flow": g='<path d="M'+cx+' '+(cy-9)+'L'+(cx+9)+' '+cy+'L'+cx+' '+(cy+9)+'L'+(cx-9)+' '+cy+'z" fill="none" stroke="'+col+'" stroke-width="2"/>';break;
+    case "code": g='<path d="M'+(cx-4)+' '+(cy-7)+'L'+(cx-10)+' '+cy+'L'+(cx-4)+' '+(cy+7)+'M'+(cx+4)+' '+(cy-7)+'L'+(cx+10)+' '+cy+'L'+(cx+4)+' '+(cy+7)+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';break;
+    case "data": g='<ellipse cx="'+cx+'" cy="'+(cy-6)+'" rx="8" ry="3" fill="none" stroke="'+col+'" stroke-width="2"/><path d="M'+(cx-8)+' '+(cy-6)+'V'+(cy+6)+'A8 3 0 0 0 '+(cx+8)+' '+(cy+6)+'V'+(cy-6)+'" fill="none" stroke="'+col+'" stroke-width="2"/>';break;
+    case "send": g='<rect x="'+(cx-9)+'" y="'+(cy-6)+'" width="18" height="12" rx="2" fill="none" stroke="'+col+'" stroke-width="2"/><path d="M'+(cx-9)+' '+(cy-5)+'L'+cx+' '+(cy+1)+'L'+(cx+9)+' '+(cy-5)+'" fill="none" stroke="'+col+'" stroke-width="2"/>';break;
+    case "alert": g='<path d="M'+cx+' '+(cy-9)+'L'+(cx+9)+' '+(cy+7)+'H'+(cx-9)+'z" fill="none" stroke="'+col+'" stroke-width="2" stroke-linejoin="round"/><line x1="'+cx+'" y1="'+(cy-3)+'" x2="'+cx+'" y2="'+(cy+2)+'" stroke="'+col+'" stroke-width="2"/>';break;
+    case "end": g='<circle cx="'+cx+'" cy="'+cy+'" r="9" fill="none" stroke="'+col+'" stroke-width="2"/><rect x="'+(cx-4)+'" y="'+(cy-4)+'" width="8" height="8" fill="'+col+'"/>';break;
+  }
+  return g;
+}
+function wfSVG(wf){
+  var NW=150,NH=62,PX=190,PY=88,pad=24;
+  var maxC=0,maxR=0; wf.nodes.forEach(function(n){maxC=Math.max(maxC,n[0]);maxR=Math.max(maxR,n[1])});
+  var W=pad*2+maxC*PX+NW, H=pad*2+maxR*PY+NH+8;
+  function pos(n){return {x:pad+n[0]*PX,y:pad+n[1]*PY}}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="Workflow canvas" font-family="IBM Plex Sans, system-ui, sans-serif">';
+  s+='<defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="'+cv("--line")+'"/></pattern>'+
+     '<marker id="wa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+cv("--muted")+'"/></marker></defs>';
+  s+='<rect width="'+W+'" height="'+H+'" fill="url(#dots)"/>';
+  wf.edges.forEach(function(e){
+    var a=pos(wf.nodes[e[0]]),b=pos(wf.nodes[e[1]]);
+    var x1=a.x+NW,y1=a.y+NH/2,x2=b.x-2,y2=b.y+NH/2,d;
+    if(Math.abs(y1-y2)<1) d='M'+x1+' '+y1+'H'+x2;
+    else { var mx=(x1+x2)/2; d='M'+x1+' '+y1+'C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2; }
+    s+='<path class="ed" data-e="'+e[0]+'-'+e[1]+'" d="'+d+'" fill="none" stroke="'+cv("--muted")+'" stroke-width="1.6" marker-end="url(#wa)"/>';
+    if(e[2]){
+      var lx=x1+12, ly=y1+(y2>y1?16:(y2<y1?-8:-7));
+      if(Math.abs(y1-y2)<1){lx=(x1+x2)/2;ly=y1-7}
+      s+='<text x="'+lx+'" y="'+ly+'" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="'+cv("--muted")+'" text-anchor="'+(Math.abs(y1-y2)<1?"middle":"start")+'">'+esc(e[2])+'</text>';
+    }
+  });
+  wf.nodes.forEach(function(n,ni){
+    var p=pos(n),k=KINDS[n[2]],col=cv(k.c);
+    var parts=n[3].split(" · "),head=parts[0],det=parts.slice(1).join(" · ");
+    s+='<g class="nd" data-n="'+ni+'"><rect class="halo" x="'+(p.x-4)+'" y="'+(p.y-4)+'" width="'+(NW+8)+'" height="'+(NH+8)+'" rx="11" fill="none" stroke="'+cv("--accent")+'" stroke-width="3"/><rect x="'+p.x+'" y="'+p.y+'" width="'+NW+'" height="'+NH+'" rx="8" fill="'+cv("--panel")+'" stroke="'+col+'" stroke-width="1.5"/>';
+    s+=glyph(n[2],p.x+20,p.y+20,col);
+    s+='<text x="'+(p.x+36)+'" y="'+(p.y+24)+'" font-size="11.5" font-weight="600" fill="'+col+'">'+esc(head)+'</text>';
+    var lines=wrapText(det,22);
+    lines.slice(0,2).forEach(function(l,i){
+      s+='<text x="'+(p.x+12)+'" y="'+(p.y+42+i*13)+'" font-size="11.5" fill="'+cv("--ink")+'">'+esc(l)+'</text>';
+    });
+    s+='</g>';
+  });
+  return s+'</svg>';
+}
+function legend(wf){
+  var used={}; wf.nodes.forEach(function(n){used[n[2]]=1});
+  return Object.keys(KINDS).filter(function(k){return used[k]}).map(function(k){
+    return '<span class="lg"><i style="background:'+cv(KINDS[k].c)+'"></i>'+esc(KINDS[k].label)+'</span>';
+  }).join("");
+}
+
+/* ---------- sheet ---------- */
+var sheet=document.getElementById("sheet");
+function render(id){
+  var u=UC[id-1];
+  var code=document.getElementById(u.snip.id).textContent.replace(/^\n/,"");
+  var h='';
+  h+='<div class="sheet-head"><div class="bignum">'+String(id).padStart(2,"0")+'</div><div>'+
+     '<div class="eyebrow">'+esc(u.group)+' · Build effort: '+esc(u.effort)+' (indicative)</div>'+
+     '<h2 id="sheet-title">'+esc(u.title)+'</h2><p class="purpose">'+esc(u.purpose)+'</p>'+
+     '<div class="chips">'+u.chips.map(function(c){return '<span class="chip">'+esc(c)+'</span>'}).join("")+'</div></div>'+
+     '<div class="nav"><button id="prev" aria-label="Previous framework">← Prev</button><button id="next" aria-label="Next framework">Next →</button></div></div>';
+
+  h+='<section class="sec"><div class="sec-h"><h3>Business case</h3></div><div class="biz">'+
+     '<div><div class="eyebrow">Problem</div><p>'+esc(u.problem)+'</p></div>'+
+     '<div><div class="eyebrow">Who it serves</div><p>'+esc(u.users)+'</p></div>'+
+     '<div><div class="eyebrow">Outcome</div><p>'+esc(u.outcome)+'</p></div></div></section>';
+
+  h+='<section class="sec"><div class="sec-h"><h3>How it plays out</h3><p>A real-time example, step by step</p></div><ol class="timeline">'+
+     u.scenario.map(function(s){return '<li><span class="when">'+esc(s[0])+'</span><p>'+esc(s[1])+'</p></li>'}).join("")+'</ol></section>';
+
+  h+='<section class="sec"><div class="sec-h"><h3>Solution architecture</h3><p>What flows in, what Campaign does, where it lands</p></div>'+
+     '<figure class="fig" style="margin:0"><div class="fig-scroll">'+archSVG(u.arch)+'</div>'+
+     '<figcaption class="fig-cap"><span class="lg"><i style="background:var(--accent)"></i>Adobe Campaign v8</span><span class="lg"><i style="background:var(--ai)"></i>AI layer</span><span>Scroll sideways on small screens.</span></figcaption></figure></section>';
+
+  h+='<section class="sec"><div class="sec-h"><h3>Workflow you would build</h3><p>As it appears on the Campaign workflow canvas</p></div>'+
+     '<figure class="fig" id="wfcanvas" style="margin:0"><div class="trace-bar"><span id="tracestate">Pick a test record below and press Trace to follow its path.</span><button id="cleartrace">Clear</button></div><div class="fig-scroll">'+wfSVG(u.wf)+'</div>'+
+     '<figcaption class="fig-cap">'+legend(u.wf)+'<span class="scroll-hint" hidden>Scroll sideways to see the full workflow →</span><span style="flex-basis:100%;color:var(--ink)">'+esc(u.wf.note)+'</span></figcaption></figure></section>';
+
+  h+='<section class="sec"><div class="sec-h"><h3>Test run</h3><p>Simulated test data. Press Trace to follow a record through the workflow.</p></div>'+testHTML(id)+'</section>';
+
+  h+='<section class="sec"><div class="sec-h"><h3>Set-up steps</h3><p>In build order, with a key configuration</p></div><div class="build">'+
+     '<ol class="steps">'+u.steps.map(function(s){return '<li><div><h4>'+esc(s[0])+'</h4><p>'+s[1]+'</p></div></li>'}).join("")+'</ol>'+
+     '<div class="side"><div><div class="eyebrow" style="margin-bottom:8px">Key set-up screen</div>'+screenHTML(id)+'</div>'+
+     '<div><div class="eyebrow" style="margin-bottom:8px">Key configuration</div><div class="code"><div class="code-h"><span>'+esc(u.snip.lang)+'</span><button id="copy">Copy</button></div><pre id="codepre">'+esc(code)+'</pre></div></div></div></div></section>';
+
+  h+='<section class="sec"><div class="trio">'+
+     '<div class="card"><h4>Execution environment</h4><dl class="kv">'+u.env.map(function(e){return '<div><dt>'+esc(e[0])+'</dt><dd>'+esc(e[1])+'</dd></div>'}).join("")+'</dl></div>'+
+     '<div class="card ai"><div class="eyebrow">AI roll-out</div><p style="margin:8px 0 6px;font-size:14px">'+esc(u.ai.app)+'</p><p style="margin:0;font-size:13.5px;color:var(--muted)">'+esc(u.ai.impact)+'</p>'+
+       '<div class="kpis">'+u.ai.kpis.map(function(k,i){return '<div class="kpi"><div><span>'+esc(k[0])+'</span><small>'+esc(KPIDEF[id][i])+'</small></div><b>'+esc(TESTS[id].kpi[i])+'</b></div>'}).join("")+'<div class="kpi-note">Values from the simulated test run</div></div></div>'+
+     '<div class="card"><h4>Risks and how we handle them</h4><ul class="risk">'+u.risks.map(function(r){return '<li><strong>'+esc(r[0])+'</strong><span>'+esc(r[1])+'</span></li>'}).join("")+'</ul></div>'+
+     '</div></section>';
+
+  sheet.innerHTML=h;
+  sheet.querySelectorAll(".trace").forEach(function(b){b.onclick=function(){traceRow(id,+b.dataset.i)}});
+  document.getElementById("cleartrace").onclick=function(){
+    clearTimeout(playTimer);
+    var svg=document.querySelector("#wfcanvas svg"); svg.classList.remove("tracing");
+    svg.querySelectorAll(".hit").forEach(function(e){e.classList.remove("hit")});
+    document.querySelectorAll(".tt tr.sel").forEach(function(tr){tr.classList.remove("sel")});
+    document.getElementById("tracestate").textContent="Pick a test record below and press Trace to follow its path.";
+  };
+  sheet.querySelectorAll(".fig").forEach(function(f){
+    var sc=f.querySelector(".fig-scroll"),hint=f.querySelector(".scroll-hint");
+    if(hint&&sc.scrollWidth>sc.clientWidth+4){hint.hidden=false}
+  });
+  sheet.setAttribute("aria-labelledby","tab-"+id);
+  document.querySelectorAll(".tile").forEach(function(t){t.setAttribute("aria-selected",String(+t.dataset.id===id))});
+  document.getElementById("prev").onclick=function(){go(id===1?10:id-1,true)};
+  document.getElementById("next").onclick=function(){go(id===10?1:id+1,true)};
+  document.getElementById("copy").onclick=function(){
+    var btn=this;
+    function done(){btn.textContent="Copied";setTimeout(function(){btn.textContent="Copy"},1500)}
+    try{navigator.clipboard.writeText(code).then(done,function(){selectCode()})}catch(e){selectCode()}
+  };
+}
+function selectCode(){var r=document.createRange();r.selectNodeContents(document.getElementById("codepre"));var s=getSelection();s.removeAllRanges();s.addRange(r)}
+var current=0;
+function go(id,scroll){
+  if(id===current)return; current=id;
+  render(id);
+  if(location.hash!=="#uc-"+id){ try{history.replaceState(null,"","#uc-"+id)}catch(e){location.hash="uc-"+id} }
+  if(scroll){var y=document.querySelector(".sheet").getBoundingClientRect().top+window.scrollY-8;window.scrollTo({top:y,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+}
+function fromHash(){var m=/^#uc-(\d+)$/.exec(location.hash);var id=m?+m[1]:1;if(id<1||id>10)id=1;go(id,false)}
+window.addEventListener("hashchange",fromHash);
+fromHash();
+</script>
+
+</body>
+</html>
