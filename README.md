@@ -46,3 +46,5 @@ Link to a single framework with `#uc-1` … `#uc-10`.
 Static pages (`index.html`, `toolkit/index.html`), no build step. Fonts load from Google Fonts.
 
 Prepared by Sangram G. · CRM & Marketing Ops architecture
+
+<!-- GitHub Pages refresh: 2026-11-24 -->
